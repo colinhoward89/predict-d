@@ -28,3 +28,8 @@ interface Competition {
   logo: string;
   countryName: string;
 }
+
+interface League {
+  id: string;
+  name: string;
+}

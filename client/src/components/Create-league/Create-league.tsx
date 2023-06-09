@@ -1,7 +1,8 @@
 import React, { FC, useState, useEffect, useContext } from 'react';
 import styles from './Create-league.module.css';
-import { getAllComps } from '../../Util/ApiService';
+import { createLeague, getAllComps } from '../../Util/ApiService';
 import { AuthContext } from './../../AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 interface CreateLeagueProps { }
 
@@ -9,6 +10,7 @@ const CreateLeague: FC<CreateLeagueProps> = () => {
   const { currentUser, isAuthenticated, handleGetUser } = useContext(AuthContext);
   const [name, setName] = useState('');
   const [competitions, setCompetitions] = useState<Competition[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (competitions.length === 0) {
@@ -19,7 +21,7 @@ const CreateLeague: FC<CreateLeagueProps> = () => {
   const fetchCompetitions = async () => {
     try {
       const response = await getAllComps();
-      setCompetitions(response); // Update this line
+      setCompetitions(response);
     } catch (error) {
       console.error('Failed to fetch competitions', error);
     }
@@ -29,10 +31,18 @@ const CreateLeague: FC<CreateLeagueProps> = () => {
     setName(event.target.value);
   };
 
-  const handleCreateLeague = (event: React.FormEvent) => {
-    event.preventDefault();
-    // Perform the logic to create the league with the entered name and selected competition
+  const handleCreateLeague = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const adminId = currentUser?.id || '';
+      await createLeague(name, competitions[0].id, adminId);
+      navigate('/leagues');
+    } catch (error) {
+      console.error('Failed to create league', error);
+      throw new Error('League creation failed');
+    }
   };
+  
 
   return (
     <div className={styles.CreateLeague}>

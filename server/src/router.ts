@@ -2,6 +2,7 @@ import { Router } from "express";
 import * as userCont from "./controllers/user.controller";
 import * as compCont from "./controllers/comp.controller";
 import * as fixtCont from "./controllers/fixture.controller";
+import * as leagueCont from "./controllers/league.controller";
 
 import { Request, Response } from "express";
 
@@ -18,5 +19,10 @@ router.put("/user/:id", userCont.editUser);
 router.get("/competitions", compCont.getAllComps);
 
 router.get("/:compid/fixtures", fixtCont.getAllFixtures);
+
+router.post("/createleague", leagueCont.createLeague);
+router.get("/myleagues/:id", leagueCont.getMyLeagues);
+router.get("/joinleagues/:id", leagueCont.getLeaguesToJoin);
+router.put("/joinleague", leagueCont.joinLeague);
 
 export default router;

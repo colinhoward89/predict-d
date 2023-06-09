@@ -114,3 +114,90 @@ export const getAllFixtures = async (compID: Competition["id"]) => {
     console.error("Error retrieving fixtures:", error);
   }
 };
+
+export const createLeague = async (name: string, competition: number, admin: string) => {
+  try {
+    const response = await fetch(`${BASE_URL}/createleague`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name,
+        competition,
+        admin,
+        players: [
+          {
+            user: admin,
+            predictions: [],
+            points: 0,
+            goals: 0,
+          },
+        ],
+      }),
+    });
+    if (response.ok) {
+      // Handle successful creation of the league
+    } else {
+      // Handle error response
+    }
+  } catch (error) {
+    console.error('Failed to create league', error);
+  }
+};
+
+export const getMyLeagues = async (userId: string) => {
+  try {
+    const response = await fetch(`${BASE_URL}/myleagues/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const myLeagues = await response.json();
+    return myLeagues;
+  } catch (error) {
+    console.error('Failed to get leagues', error);
+    throw new Error('Failed to get leagues');
+  }
+};
+
+export const getLeaguesToJoin = async (userId: string) => {
+  try {
+    const response = await fetch(`${BASE_URL}/joinleagues/${userId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!response.ok) {
+      throw new Error('Failed to fetch leagues to join');
+    }
+    const leaguesToJoin = await response.json();
+    return leaguesToJoin;
+  } catch (error) {
+    console.error('Failed to fetch leagues to join', error);
+    throw new Error('Failed to fetch leagues to join');
+  }
+};
+
+export const joinLeague = async (leagueId: string, userID: string) => {
+  try {
+    const response = await fetch(`${BASE_URL}/joinleague`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ leagueId, userID }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to join the league');
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Failed to join the league', error);
+    throw new Error('Failed to join the league');
+  }
+};

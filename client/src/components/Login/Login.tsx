@@ -6,7 +6,7 @@ import { useAuth } from '../../AuthContext';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
-  const { handleGetUser } = useAuth();
+  const { currentUser, isAuthenticated, handleGetUser } = useAuth();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -37,6 +37,9 @@ const Login: React.FC = () => {
       console.error('Login failed', error);
     }
   };
+
+  console.log(currentUser)
+  console.log(isAuthenticated)
 
   return (
     <div>

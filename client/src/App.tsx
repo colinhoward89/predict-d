@@ -7,6 +7,7 @@ import Home from './components/Home/Home';
 import Navbar from './components/Navbar/Navbar';
 import Logout from './components/Logout/Logout';
 import LeagueList from './components/League-list/League-list';
+import PredictionsList from './components/Predictions-list/Predictions-list';
 
 function App() {
   const { currentUser, isAuthenticated, handleGetUser } = useAuth();
@@ -29,6 +30,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/leagues" element={<LeagueList />} />
+        <Route path="/predictions" element={<PredictionsList />} />
       </Routes>
     </Router>
     </AuthProvider>

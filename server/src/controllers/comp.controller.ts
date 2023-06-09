@@ -32,6 +32,9 @@ const getAllComps = async (req: Request, res: Response) => {
       };
     });
 
+    // Sort the competitions alphabetically by country name
+    extractedCompetitions.sort((a: any, b: any) => a.countryName.localeCompare(b.countryName));
+
     // Send the extracted competitions as the response
     res.json(extractedCompetitions);
   } catch (error) {

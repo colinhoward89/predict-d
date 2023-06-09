@@ -94,6 +94,7 @@ export const getAllComps = async () => {
     });
     const competitions = await response.json();
     return competitions;
+    console.log(competitions);
   } catch (error) {
     console.error("Error retrieving competitions:", error);
   }

@@ -2,9 +2,11 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 import styles from './Register.module.css';
 import { useNavigate } from 'react-router-dom';
 import { createUser } from '../../Util/ApiService';
+import { useAuth } from '../../AuthContext';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
+  const { handleGetUser } = useAuth();
 
   const [email, setEmail] = useState('');
   const [team, setTeam] = useState('');
@@ -37,6 +39,7 @@ const Register: React.FC = () => {
       if (response.error) {
         console.error('Registration failed');
       } else {
+        handleGetUser(email);
         navigate('/leagues');
       }
     } catch (error) {

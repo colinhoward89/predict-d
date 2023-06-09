@@ -14,17 +14,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   console.log(currentUser)
 
   // Checks if user exists in the database
-  const handleGetUser = async (email: String) => {
-    const receivedUser = await getUser(email);
-    if (receivedUser) {
-      setCurrentUser({
-        email: receivedUser[0].email,
-        team: receivedUser[0].team,
-        image: receivedUser[0].image ? receivedUser[0].image : null,
-        id: receivedUser[0]._id,
-      });
+  const handleGetUser = async (email: string) => {
+    if (email) {
+      const receivedUser = await getUser(email);
+      if (receivedUser) {
+        setCurrentUser({
+          email: receivedUser[0].email,
+          team: receivedUser[0].team,
+          image: receivedUser[0].image ? receivedUser[0].image : null,
+          id: receivedUser[0]._id,
+        });
+      } else {
+        setCurrentUser(null); // Set currentUser to null if receivedUser is not found
+        console.log(currentUser);
+      }
+    } else {
+      setCurrentUser(null); // Set currentUser to null if email is empty
+      console.log(currentUser);
     }
   };
+  
 
   const isAuthenticated = !!currentUser;
 

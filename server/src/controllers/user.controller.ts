@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 
 const createUser = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { email, password, team } = req.body;
   try {
     const user = await User.findOne({ email: email });
     if (user) {
@@ -16,7 +16,8 @@ const createUser = async (req: Request, res: Response) => {
     }
     const hash = await bcrypt.hash(password, 10);
     const newUser = new User({
-      ...req.body,
+      email: email,
+      team: team,
       password: hash,
     });
     const savedUser = await newUser.save();

@@ -3,7 +3,6 @@ import axios from 'axios';
 
 const getAllFixtures = async (req: Request, res: Response) => {
   try {
-    console.log(req.params);
     const compID = req.params.compid;
     const url = `https://api-football-v1.p.rapidapi.com/v3/fixtures`;
     const response = await axios({

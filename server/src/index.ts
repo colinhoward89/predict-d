@@ -1,4 +1,5 @@
 import express, { Express, Request, Response } from 'express';
+import cors from 'cors';
 import session from 'express-session';
 const SECRET = process.env.SECRET || 'this is not very secure';
 import router from './router';
@@ -13,6 +14,11 @@ app.listen(PORT, () => {
 });
 
 app
+  .use(cors({
+    origin: 'http://localhost:3000', // Specify the allowed origin
+    credentials: true, // Enable credentials (cookies, authorization headers, etc.)
+  }))
+  .use(express.json())
   .use(router)
   .use(session({
     name: 'sid',

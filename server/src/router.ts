@@ -7,10 +7,6 @@ import { Request, Response } from "express";
 
 const router = Router();
 
-router.get("/", (req: Request, res: Response) => {
-  res.send("Hello");
-});
-
 router.post("/register", userCont.createUser);
 router.post("/login", userCont.login);
 router.post("/logout", userCont.logout);

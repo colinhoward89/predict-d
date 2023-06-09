@@ -1,11 +1,17 @@
 /// <reference types="react-scripts" />
 
-interface User {
+interface UserData {
   email: string;
   password: string;
   team: string;
   image: string | undefined;
   id?: string;
+}
+
+interface AuthContextValue {
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  user: User | null;
 }
 
 interface Competition {

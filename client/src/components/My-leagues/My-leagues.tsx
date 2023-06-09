@@ -2,12 +2,15 @@ import React, { FC, useEffect, useState } from 'react';
 import styles from './My-leagues.module.css';
 import { getMyLeagues } from '../../Util/ApiService';
 import { useAuth } from '../../AuthContext';
+import LeagueTable from '../League-table/League-table';
 
 interface MyLeaguesProps {}
 
 const MyLeagues: FC<MyLeaguesProps> = () => {
-  const [leagues, setLeagues] = useState<string[]>([]);
+  const [leagues, setLeagues] = useState<any[]>([]);
   const { currentUser } = useAuth();
+  const [selectedLeague, setSelectedLeague] = useState<any>(null);
+  console.log(leagues)
 
   useEffect(() => {
     fetchMyLeagues();
@@ -18,24 +21,43 @@ const MyLeagues: FC<MyLeaguesProps> = () => {
       const userId = currentUser?.id;
       if (userId) {
         const response = await getMyLeagues(userId);
-        setLeagues(response.map((league: any) => league.name));
+        setLeagues(response);
       }
     } catch (error) {
       console.error('Failed to fetch my leagues', error);
     }
   };
 
+  const handleLeagueClick = (league: any) => {
+    setSelectedLeague(league);
+  };
+
+  const handleBackClick = () => {
+    setSelectedLeague(null);
+  };
+
   return (
     <div className={styles.MyLeagues}>
-      <h2>My Leagues</h2>
-      {leagues.length > 0 ? (
-        <ul>
-          {leagues.map((league) => (
-            <li key={league}>{league}</li>
-          ))}
-        </ul>
+      {selectedLeague ? (
+        <>
+          <button onClick={handleBackClick}>Back</button>
+          <LeagueTable league={selectedLeague} />
+        </>
       ) : (
-        <p>No leagues found.</p>
+        <>
+          <h2>My Leagues</h2>
+          {leagues.length > 0 ? (
+            <ul>
+              {leagues.map((league) => (
+                <li key={league._id}>
+                  <button onClick={() => handleLeagueClick(league)}>{league.name}</button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No leagues found.</p>
+          )}
+        </>
       )}
     </div>
   );

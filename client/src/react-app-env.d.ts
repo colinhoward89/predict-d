@@ -8,10 +8,17 @@ interface UserData {
   id?: string;
 }
 
+interface User {
+  email: string;
+  team: string;
+  image: string;
+  id: string;
+}
+
 interface AuthContextValue {
+  currentUser: User | null;
   isAuthenticated: boolean;
-  isLoading: boolean;
-  user: User | null;
+  handleGetUser: (email: string) => Promise<void>;
 }
 
 interface Competition {

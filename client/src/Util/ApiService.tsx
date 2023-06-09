@@ -57,6 +57,17 @@ export const login = (email: string, password: string): Promise<any> => {
     .catch((err) => console.log(err));
 };
 
+export const logout = (): Promise<any> => {
+  return fetch(`${BASE_URL}/logout`, {
+    method: "POST",
+    credentials: "include",
+    mode: "cors",
+    headers: { "Content-Type": "application/json" },
+  })
+    .then((res) => res.json())
+    .catch((err) => console.log(err));
+};
+
 export const updateUser = async (updatedUser: UserData) => {
   try {
     const response = await fetch(`${BASE_URL}/user/${updatedUser.id}`, {

@@ -1,51 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { AuthProvider, useAuth } from './AuthContext';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import Register from './components/Register/Register';
 import Login from './components/Login/Login';
 import Home from './components/Home/Home';
+import Navbar from './components/Navbar/Navbar';
+import Logout from './components/Logout/Logout';
+import LeagueList from './components/League-list/League-list';
 
 function App() {
-  const { isAuthenticated, isLoading } = useAuth();
-  const [isRegisterSelected, setIsRegisterSelected] = useState(false);
+  const { currentUser, isAuthenticated, handleGetUser } = useAuth();
 
-  const handleButtonClick = () => {
-    setIsRegisterSelected(!isRegisterSelected);
-  };
+  useEffect(() => {
+    if (isAuthenticated && currentUser) {
+      handleGetUser(currentUser.email);
+    }
+  }, [isAuthenticated, currentUser]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  console.log("from App", currentUser, isAuthenticated)
 
   return (
+    <AuthProvider>
     <Router>
+      <Navbar />
       <Routes>
-        <Route path="/" element={isAuthenticated ? (<Home />) : (
-              <div>
-                <button onClick={handleButtonClick}>
-                  {isRegisterSelected ? 'Login' : 'Register'}
-                </button>
-                {isRegisterSelected ? <Register /> : <Login />}
-              </div>
-            )
-          }
-        />
-        <Route path="/login" element={!isAuthenticated ? (
-              <Login />
-            ) : (
-              <Navigate to="/" />
-            )
-          }
-        />
-        <Route path="/register" element={!isAuthenticated ? (
-              <Register />
-            ) : (
-              <Navigate to="/" />
-            )
-          }
-        />
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/logout" element={<Logout />} />
+        <Route path="/leagues" element={<LeagueList />} />
       </Routes>
     </Router>
+    </AuthProvider>
   );
 }
 

@@ -34,10 +34,10 @@ const Register: React.FC = () => {
     e.preventDefault();
     try {
       const response = await createUser(email, team, password);
-      if (response.ok) {
-        navigate('/Home');
-      } else {
+      if (response.error) {
         console.error('Registration failed');
+      } else {
+        navigate('/leagues');
       }
     } catch (error) {
       console.error('Registration failed', error);

@@ -2,9 +2,11 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 import styles from './Login.module.css';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../Util/ApiService';
+import { useAuth } from '../../AuthContext';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const { handleGetUser } = useAuth();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,13 +25,13 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     try {
       const response = await login(email, password);
-      if (response.ok) {
-        navigate('/home');
-      } else {
+      if (response.error) {
         console.error('Login failed response not ok');
+      } else {
+        handleGetUser(email);
+        navigate('/leagues');
       }
     } catch (error) {
       console.error('Login failed', error);

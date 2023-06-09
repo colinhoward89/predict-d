@@ -66,3 +66,18 @@ export const getAllComps = async () => {
     console.error("Error retrieving competitions:", error);
   }
 };
+
+export const getAllFixtures = async (compID: Competition["id"]) => {
+  try {
+    const response = await fetch(`${BASE_URL}/${compID}/fixtures`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const competitions = await response.json();
+    return competitions;
+  } catch (error) {
+    console.error("Error retrieving fixtures:", error);
+  }
+};

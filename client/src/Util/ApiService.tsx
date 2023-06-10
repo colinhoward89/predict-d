@@ -257,3 +257,63 @@ export const getPrediction = async (userId: string, fixtureId: number) => {
     throw new Error('Failed to fetch prediction');
   }
 };
+
+export const getAllPredictions = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/allpredictions`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error('Failed to fetch predictions');
+  }
+};
+
+
+export const updateLeague = async (league: any) => {
+  console.log(league._id)
+  if (league._id === null) {
+    throw new Error('League ID is null');
+  }
+
+  try {
+    const response = await fetch(`${BASE_URL}/updateleague/${league._id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(league),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update league');
+    }
+  } catch (error) {
+    console.error('Failed to update league:', error);
+    throw error;
+  }
+};
+
+
+export const updatePrediction = async (predictionId: number, updatedPrediction: any) => {
+  try {
+    const response = await fetch(`${BASE_URL}/updatepredictions/${predictionId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedPrediction),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update prediction');
+    }
+  } catch (error) {
+    console.error('Failed to update prediction:', error);
+    throw error;
+  }
+};

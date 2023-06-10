@@ -12,23 +12,46 @@ const FixtureRow: FC<FixtureRowProps> = ({
 }) => {
   const submitStateData = submitState ?? { submitting: false, submitResult: '' };
 
+  const formatDate = (dateString: any) => {
+    const date = new Date(dateString);
+    const options = { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+    const formattedDate = date.toLocaleString('en-US', options as Intl.DateTimeFormatOptions);
+
+    const [datePart, timePart] = formattedDate.split(', ');
+    return (
+      <>
+        {datePart}
+        <br />
+        {timePart}
+      </>
+    );
+  };
+
   return (
     <tr key={fixture.fixtureId}>
-      <td>{fixture.date}</td>
+      <td className={styles.MultiLineCell}>{formatDate(fixture.date)}</td>
       <td>
-        <img className={styles.logo} src={fixture.home.logo} alt="Home Logo" />
-        {fixture.home.name}
+        <div>
+          <img className={styles.logo} src={fixture.home.logo} alt="Home Logo" />
+          {fixture.home.name}
+        </div>
+        <div>
+          <img className={styles.logo} src={fixture.away.logo} alt="Away Logo" />
+          {fixture.away.name}
+        </div>
       </td>
       <td>
-        {fixture.away.name}
-        <img className={styles.logo} src={fixture.away.logo} alt="Away Logo" />
-      </td>
-      <td>
-        {fixture.score.home} - {fixture.score.away}
+        <div>
+          {fixture.score.home}
+        </div>
+        <div>
+          {fixture.score.away}
+        </div>
       </td>
       <td>{fixture.status}</td>
       <td>
         <input
+          className={styles.predictionInput}
           type="number"
           value={homePrediction === null ? '' : homePrediction}
           onChange={(e) => onHomePredictionChange(fixture.fixtureId, e.target.value !== '' ? parseInt(e.target.value) : null)}
@@ -36,6 +59,7 @@ const FixtureRow: FC<FixtureRowProps> = ({
       </td>
       <td>
         <input
+          className={styles.predictionInput}
           type="number"
           value={awayPrediction === null ? '' : awayPrediction}
           onChange={(e) => onAwayPredictionChange(fixture.fixtureId, e.target.value !== '' ? parseInt(e.target.value) : null)}

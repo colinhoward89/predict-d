@@ -39,7 +39,6 @@ async function populateDatabase() {
     ]
     const insertedUsers = await User.insertMany(users);
     const userObjectIDs = insertedUsers.map(user => user._id);
-    console.log('User ObjectIDs:', userObjectIDs);
     const leagues = [{
       name: 'Basalt Staff Prediction League',
       competition: 131,

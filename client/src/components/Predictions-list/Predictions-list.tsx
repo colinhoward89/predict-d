@@ -245,12 +245,10 @@ const PredictionsList: FC<PredictionsListProps> = () => {
             <thead>
               <tr>
                 <th>Date</th>
-                <th>Home</th>
-                <th>Away</th>
+                <th>Fixture</th>
                 <th>Score</th>
                 <th>Status</th>
-                <th>H Pred</th>
-                <th>A Pred</th>
+                <th colSpan={2}>Prediction</th>
                 <th>Action</th>
               </tr>
             </thead>

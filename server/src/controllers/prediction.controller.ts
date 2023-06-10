@@ -35,6 +35,16 @@ const getPredictions = async (req: Request, res: Response) => {
   }
 };
 
+const getAllPredictions = async (req: Request, res: Response) => {
+  try {
+    const predictions = await Prediction.find();
+    res.json(predictions);
+  } catch (error) {
+    console.error('Failed to fetch predictions', error);
+    res.status(500).json({ error: 'Failed to fetch predictions' });
+  }
+};
+
 const editPredict = async (req: Request, res: Response) => {
   try {
     const { userID, match } = req.params;
@@ -57,4 +67,30 @@ const editPredict = async (req: Request, res: Response) => {
   }
 };
 
-export { predictOne, getPredictions, editPredict }
+const updatePrediction = async (req: Request, res: Response) => {
+  try {
+    console.log(req.body)
+    const { points, goals, updated, ID } = req.body;
+
+    // Find the prediction by predictionId
+    const prediction = await Prediction.findById(ID);
+    if (!prediction) {
+      return res.status(404).json({ error: 'Prediction not found' });
+    }
+
+    // Update the points, goals, and updated fields
+    prediction.points = points;
+    prediction.goal = goals;
+    prediction.updated = updated;
+
+    // Save the updated prediction
+    await prediction.save();
+
+    res.status(200).json({ success: true });
+  } catch (err) {
+    console.error('Failed to update prediction', err);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+};
+
+export { predictOne, getPredictions, getAllPredictions, editPredict, updatePrediction }

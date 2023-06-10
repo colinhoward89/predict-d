@@ -3,8 +3,7 @@ import * as userCont from "./controllers/user.controller";
 import * as compCont from "./controllers/comp.controller";
 import * as fixtCont from "./controllers/fixture.controller";
 import * as leagueCont from "./controllers/league.controller";
-
-import { Request, Response } from "express";
+import * as predCont from "./controllers/prediction.controller";
 
 const router = Router();
 
@@ -24,5 +23,7 @@ router.post("/createleague", leagueCont.createLeague);
 router.get("/myleagues/:id", leagueCont.getMyLeagues);
 router.get("/joinleagues/:id", leagueCont.getLeaguesToJoin);
 router.put("/joinleague", leagueCont.joinLeague);
+
+router.post("/predict", predCont.predictOne);
 
 export default router;

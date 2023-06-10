@@ -33,3 +33,58 @@ interface League {
   id: string;
   name: string;
 }
+
+interface Fixture {
+  fixtureId: string;
+  date: string;
+  home: {
+    logo: string;
+    name: string;
+  };
+  away: {
+    logo: string;
+    name: string;
+  };
+  score: {
+    home: number | null;
+    away: number | null;
+  };
+  status: string;
+}
+
+interface PaginationProps {
+  fixturesPerPage: number;
+  totalFixtures: number;
+  paginate: (pageNumber: number) => void;
+  currentPage: number;
+}
+
+interface FixtureRowProps {
+  fixture: {
+    fixtureId: string;
+    date: string;
+    home: {
+      logo: string;
+      name: string;
+    };
+    away: {
+      logo: string;
+      name: string;
+    };
+    score: {
+      home: number | null;
+      away: number | null;
+    };
+    status: string;
+  };
+  homePrediction: number | null;
+  awayPrediction: number | null;
+  submitState: { submitting: boolean; submitResult: string };
+  onHomePredictionChange: (fixtureId: string, value: number | null) => void;
+  onAwayPredictionChange: (fixtureId: string, value: number | null) => void;
+  onSubmitPrediction: (fixtureId: string) => void;
+}
+
+interface PredictionsListProps {
+  onSubmitAllPredictions: () => void;
+}

@@ -18,7 +18,7 @@ const predictionSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  score: {
+  points: {
     type: Number,
   },
   goal: {

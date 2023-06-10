@@ -8,13 +8,15 @@ interface MyLeaguesProps {}
 
 const MyLeagues: FC<MyLeaguesProps> = () => {
   const [leagues, setLeagues] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const { currentUser } = useAuth();
   const [selectedLeague, setSelectedLeague] = useState<any>(null);
-  console.log(leagues)
 
   useEffect(() => {
-    fetchMyLeagues();
-  }, []);
+    if (currentUser) {
+      fetchMyLeagues();
+    }
+  }, [currentUser]);
 
   const fetchMyLeagues = async () => {
     try {
@@ -22,9 +24,11 @@ const MyLeagues: FC<MyLeaguesProps> = () => {
       if (userId) {
         const response = await getMyLeagues(userId);
         setLeagues(response);
+        setLoading(false);
       }
     } catch (error) {
       console.error('Failed to fetch my leagues', error);
+      setLoading(false);
     }
   };
 
@@ -46,7 +50,9 @@ const MyLeagues: FC<MyLeaguesProps> = () => {
       ) : (
         <>
           <h2>My Leagues</h2>
-          {leagues.length > 0 ? (
+          {loading ? (
+            <p>Loading leagues...</p>
+          ) : leagues.length > 0 ? (
             <ul>
               {leagues.map((league) => (
                 <li key={league._id}>

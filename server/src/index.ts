@@ -5,13 +5,30 @@ const SECRET = process.env.SECRET || 'this is not very secure';
 import router from './router';
 import dotenv from 'dotenv';
 dotenv.config();
+import { dbConnection } from './models/index';
+import User from './models/user';
+import populateDatabase from './asset/seedScript';
 
 const app: Express = express();
 const PORT: Number = Number(process.env.PORT) || 4000;
 
-app.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
-});
+(async () => {
+  try {
+    await dbConnection;
+
+    console.log('Connected to DB');
+
+    const user = await User.find();
+    if (user.length === 0) populateDatabase()
+
+
+    app.listen(PORT, () => {
+      console.log(`Server running at http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error("Unable to connect to the database: ", error);
+  }
+})();
 
 app
   .use(cors({

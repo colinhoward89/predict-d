@@ -38,9 +38,6 @@ const Login: React.FC = () => {
     }
   };
 
-  console.log(currentUser)
-  console.log(isAuthenticated)
-
   return (
     <div>
       <h2>Login</h2>

@@ -94,7 +94,6 @@ export const getAllComps = async () => {
     });
     const competitions = await response.json();
     return competitions;
-    console.log(competitions);
   } catch (error) {
     console.error("Error retrieving competitions:", error);
   }
@@ -202,7 +201,7 @@ export const joinLeague = async (leagueId: string, userID: string) => {
   }
 };
 
-export const submitPrediction = async (userID: string, match: string, home: number | null, away: number | null) => {
+export const submitPrediction = async (userID: string, match: number, home: number | null, away: number | null) => {
   try {
     const response = await fetch(`${BASE_URL}/predict`, {
       method: 'POST',
@@ -222,3 +221,19 @@ export const submitPrediction = async (userID: string, match: string, home: numb
     throw new Error('Failed to submit prediction');
   }
 }
+
+export const getPrediction = async (userId: string, fixtureId: number) => {
+  try {
+    const queryString = `userId=${userId}&fixtureId=${fixtureId}`;
+    const response = await fetch(`${BASE_URL}/predictions?${queryString}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error('Failed to fetch prediction');
+  }
+};

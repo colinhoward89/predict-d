@@ -11,7 +11,6 @@ export const AuthContext = createContext<AuthContextValue>(initialAuthContextVal
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  console.log(currentUser)
 
   // Checks if user exists in the database
   const handleGetUser = async (email: string) => {
@@ -26,11 +25,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         });
       } else {
         setCurrentUser(null); // Set currentUser to null if receivedUser is not found
-        console.log(currentUser);
       }
     } else {
       setCurrentUser(null); // Set currentUser to null if email is empty
-      console.log(currentUser);
     }
   };
   

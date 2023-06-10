@@ -18,8 +18,6 @@ function App() {
     }
   }, [isAuthenticated, currentUser]);
 
-  console.log("from App", currentUser, isAuthenticated)
-
   return (
     <AuthProvider>
     <Router>

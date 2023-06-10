@@ -1,30 +1,55 @@
 import React, { FC, useEffect, useState, useMemo } from 'react';
 import styles from './Predictions-list.module.css';
-import { getMyLeagues, getAllFixtures, submitPrediction } from '../../Util/ApiService';
+import { getMyLeagues, getAllFixtures, submitPrediction, getPrediction } from '../../Util/ApiService';
 import { useAuth } from '../../AuthContext';
 import FixtureRow from '../Fixture-row/Fixture-row';
 import Pagination from '../Pagination/Pagination';
 
-interface PredictionsListProps {}
+interface PredictionsListProps { }
 
 const PredictionsList: FC<PredictionsListProps> = () => {
   const [fixtures, setFixtures] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [filter, setFilter] = useState<'past' | 'future'>('future');
   const { currentUser } = useAuth();
-  const [homePredictions, setHomePredictions] = useState<{ [fixtureId: string]: number | null }>({});
-  const [awayPredictions, setAwayPredictions] = useState<{ [fixtureId: string]: number | null }>({});
+  const [homePredictions, setHomePredictions] = useState<{ [fixtureId: number]: number | null }>({});
+  const [awayPredictions, setAwayPredictions] = useState<{ [fixtureId: number]: number | null }>({});  
   const [submitting, setSubmitting] = useState(false);
   const [submitResult, setSubmitResult] = useState<'success' | 'error' | null>(null);
-  const [submitState, setSubmitState] = useState<{ [fixtureId: string]: { submitting: boolean; submitResult: string } }>(
+  const [submitState, setSubmitState] = useState<{ [fixtureId: number]: { submitting: boolean; submitResult: string } }>(
     {}
   );
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [fixturesPerPage] = useState<number>(20);
+  const [predictions, setPredictions] = useState<any[]>([]);
 
   useEffect(() => {
     fetchFixtures();
   }, []);
+
+  const fetchPredictions = async (fixtureIds: number[]) => {
+    try {
+      const userId = currentUser?.id;
+      if (userId) {
+        const updatedHomePredictions = { ...homePredictions };
+        const updatedAwayPredictions = { ...awayPredictions };
+  
+        for (const fixtureId of fixtureIds) {
+          const response = await getPrediction(userId, fixtureId);
+          if (response.length > 0) {
+            const prediction = response[0];
+            updatedHomePredictions[fixtureId] = prediction.home;
+            updatedAwayPredictions[fixtureId] = prediction.away;
+          }
+        }
+  
+        setHomePredictions(updatedHomePredictions);
+        setAwayPredictions(updatedAwayPredictions);
+      }
+    } catch (error) {
+      console.error('Failed to fetch predictions', error);
+    }
+  };  
 
   const fetchFixtures = async () => {
     try {
@@ -44,6 +69,7 @@ const PredictionsList: FC<PredictionsListProps> = () => {
         const allFixtures = fixturesArray.flat();
         setFixtures(allFixtures);
         setLoading(false);
+        fetchPredictions(allFixtures.map((fixture: any) => fixture.fixtureId));
       }
     } catch (error) {
       console.error('Failed to fetch fixtures', error);
@@ -54,16 +80,45 @@ const PredictionsList: FC<PredictionsListProps> = () => {
     setFilter(selectedFilter);
   };
 
-  const handleHomePredictionChange = (fixtureId: string, value: number | null) => {
-    setHomePredictions((prevState) => ({ ...prevState, [fixtureId]: value }));
+  const handleHomePredictionChange = (fixtureId: number, value: number | null) => {
+    setHomePredictions((prevState) => ({
+      ...prevState,
+      [fixtureId]: value,
+    }));
+
+    setPredictions((prevState) =>
+      prevState.map((prediction) => {
+        if (prediction.match === fixtureId) {
+          return {
+            ...prediction,
+            home: value,
+          };
+        }
+        return prediction;
+      })
+    );
   };
 
-  const handleAwayPredictionChange = (fixtureId: string, value: number | null) => {
-    setAwayPredictions((prevState) => ({ ...prevState, [fixtureId]: value }));
+  const handleAwayPredictionChange = (fixtureId: number, value: number | null) => {
+    setAwayPredictions((prevState) => ({
+      ...prevState,
+      [fixtureId]: value,
+    }));
+
+    setPredictions((prevState) =>
+      prevState.map((prediction) => {
+        if (prediction.match === fixtureId) {
+          return {
+            ...prediction,
+            away: value,
+          };
+        }
+        return prediction;
+      })
+    );
   };
 
-  const handleSubmitPrediction = async (fixtureId: string) => {
-    // Set the submit state to indicate that submission is in progress
+  const handleSubmitPrediction = async (fixtureId: number) => {
     setSubmitState((prevState) => ({
       ...prevState,
       [fixtureId]: { submitting: true, submitResult: '' },
@@ -75,7 +130,6 @@ const PredictionsList: FC<PredictionsListProps> = () => {
       const userId = currentUser?.id;
       if (userId) {
         const response = await submitPrediction(userId, fixtureId, homePrediction, awayPrediction);
-        // Set the submit result as success
         setSubmitState((prevState) => ({
           ...prevState,
           [fixtureId]: { submitting: false, submitResult: 'success' },
@@ -83,7 +137,6 @@ const PredictionsList: FC<PredictionsListProps> = () => {
       }
     } catch (error) {
       console.error(`Failed to submit prediction for fixture ${fixtureId}`, error);
-      // Set the submit result as error
       setSubmitState((prevState) => ({
         ...prevState,
         [fixtureId]: { submitting: false, submitResult: 'error' },
@@ -136,7 +189,7 @@ const PredictionsList: FC<PredictionsListProps> = () => {
 
   const filteredFixtures = useMemo(() => {
     const currentDate = new Date().getTime();
-  
+
     return fixtures.filter((fixture: any) => {
       const fixtureDate = new Date(fixture.date).getTime();
       if (filter === 'past') {
@@ -149,7 +202,7 @@ const PredictionsList: FC<PredictionsListProps> = () => {
 
   const indexOfLastFixture = currentPage * fixturesPerPage;
   const indexOfFirstFixture = indexOfLastFixture - fixturesPerPage;
-  const currentFixtures = filteredFixtures.slice(indexOfFirstFixture, indexOfLastFixture);  
+  const currentFixtures = filteredFixtures.slice(indexOfFirstFixture, indexOfLastFixture);
 
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -189,18 +242,35 @@ const PredictionsList: FC<PredictionsListProps> = () => {
               </tr>
             </thead>
             <tbody>
-              {currentFixtures.map((fixture) => (
-                <FixtureRow
-                  key={fixture.fixtureId}
-                  fixture={fixture}
-                  homePrediction={homePredictions[fixture.fixtureId]}
-                  awayPrediction={awayPredictions[fixture.fixtureId]}
-                  onHomePredictionChange={handleHomePredictionChange}
-                  onAwayPredictionChange={handleAwayPredictionChange}
-                  onSubmitPrediction={handleSubmitPrediction}
-                  submitState={submitState[fixture.fixtureId]}
-                />
-              ))}
+              {currentFixtures.map((fixture) => {
+                const prediction = Array.isArray(predictions)
+                  ? predictions.find((p) => p.match === fixture.fixtureId)
+                  : null;
+                const homePrediction =
+                  homePredictions[fixture.fixtureId] !== undefined
+                    ? homePredictions[fixture.fixtureId]
+                    : prediction
+                      ? prediction.home
+                      : null;
+                const awayPrediction =
+                  awayPredictions[fixture.fixtureId] !== undefined
+                    ? awayPredictions[fixture.fixtureId]
+                    : prediction
+                      ? prediction.away
+                      : null;
+                return (
+                  <FixtureRow
+                    key={fixture.fixtureId}
+                    fixture={fixture}
+                    homePrediction={homePrediction}
+                    awayPrediction={awayPrediction}
+                    onHomePredictionChange={handleHomePredictionChange}
+                    onAwayPredictionChange={handleAwayPredictionChange}
+                    onSubmitPrediction={handleSubmitPrediction}
+                    submitState={submitState[fixture.fixtureId]}
+                  />
+                );
+              })}
             </tbody>
           </table>
           <Pagination

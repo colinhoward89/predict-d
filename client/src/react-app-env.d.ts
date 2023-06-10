@@ -35,7 +35,7 @@ interface League {
 }
 
 interface Fixture {
-  fixtureId: string;
+  fixtureId: number;
   date: string;
   home: {
     logo: string;
@@ -61,7 +61,7 @@ interface PaginationProps {
 
 interface FixtureRowProps {
   fixture: {
-    fixtureId: string;
+    fixtureId: number;
     date: string;
     home: {
       logo: string;
@@ -80,9 +80,9 @@ interface FixtureRowProps {
   homePrediction: number | null;
   awayPrediction: number | null;
   submitState: { submitting: boolean; submitResult: string };
-  onHomePredictionChange: (fixtureId: string, value: number | null) => void;
-  onAwayPredictionChange: (fixtureId: string, value: number | null) => void;
-  onSubmitPrediction: (fixtureId: string) => void;
+  onHomePredictionChange: (fixtureId: number, value: number | null) => void;
+  onAwayPredictionChange: (fixtureId: number, value: number | null) => void;
+  onSubmitPrediction: (fixtureId: number) => void;
 }
 
 interface PredictionsListProps {

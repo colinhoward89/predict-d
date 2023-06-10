@@ -7,7 +7,7 @@ const predictionSchema = new mongoose.Schema({
     required: true,
   },
   match: {
-    type: String,
+    type: Number,
     required: true,
   },
   home: {

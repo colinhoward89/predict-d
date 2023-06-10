@@ -25,6 +25,7 @@ router.get("/joinleagues/:id", leagueCont.getLeaguesToJoin);
 router.put("/joinleague", leagueCont.joinLeague);
 
 router.post("/predict", predCont.predictOne);
+router.put("/editpredict/:userID/:match", predCont.editPredict);
 router.get("/predictions", predCont.getPredictions);
 
 export default router;

@@ -35,4 +35,26 @@ const getPredictions = async (req: Request, res: Response) => {
   }
 };
 
-export { predictOne, getPredictions }
+const editPredict = async (req: Request, res: Response) => {
+  try {
+    const { userID, match } = req.params;
+    const { home, away } = req.body;
+
+    const prediction = await Prediction.findOneAndUpdate(
+      { user: userID, match: parseInt(match) },
+      { home, away },
+      { new: true }
+    );
+
+    if (!prediction) {
+      return res.status(404).json({ error: 'Prediction not found' });
+    }
+
+    res.status(200).json(prediction);
+  } catch (error) {
+    console.error('Failed to edit prediction', error);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+};
+
+export { predictOne, getPredictions, editPredict }

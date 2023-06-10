@@ -222,6 +222,26 @@ export const submitPrediction = async (userID: string, match: number, home: numb
   }
 }
 
+export const editPrediction = async (userID: string, match: number, home: number | null, away: number | null) => {
+  try {
+    const response = await fetch(`${BASE_URL}/editpredict/${userID}/${match}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ home, away }),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to edit prediction');
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Failed to edit prediction', error);
+    throw new Error('Failed to edit prediction');
+  }
+};
+
 export const getPrediction = async (userId: string, fixtureId: number) => {
   try {
     const queryString = `userId=${userId}&fixtureId=${fixtureId}`;

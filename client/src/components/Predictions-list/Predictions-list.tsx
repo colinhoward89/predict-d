@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState, useMemo } from 'react';
 import styles from './Predictions-list.module.css';
-import { getMyLeagues, getAllFixtures, submitPrediction, getPrediction } from '../../Util/ApiService';
+import { getMyLeagues, getAllFixtures, submitPrediction, getPrediction, editPrediction } from '../../Util/ApiService';
 import { useAuth } from '../../AuthContext';
 import FixtureRow from '../Fixture-row/Fixture-row';
 import Pagination from '../Pagination/Pagination';
@@ -123,13 +123,18 @@ const PredictionsList: FC<PredictionsListProps> = () => {
       ...prevState,
       [fixtureId]: { submitting: true, submitResult: '' },
     }));
-
+  
     const homePrediction = homePredictions[fixtureId];
     const awayPrediction = awayPredictions[fixtureId];
     try {
       const userId = currentUser?.id;
       if (userId) {
-        const response = await submitPrediction(userId, fixtureId, homePrediction, awayPrediction);
+        const existingPrediction = await getPrediction(userId, fixtureId);
+        if (existingPrediction.length > 0) {
+          const response = await editPrediction(userId, fixtureId, homePrediction, awayPrediction);
+        } else {
+          const response = await submitPrediction(userId, fixtureId, homePrediction, awayPrediction);
+        }
         setSubmitState((prevState) => ({
           ...prevState,
           [fixtureId]: { submitting: false, submitResult: 'success' },
@@ -142,18 +147,21 @@ const PredictionsList: FC<PredictionsListProps> = () => {
         [fixtureId]: { submitting: false, submitResult: 'error' },
       }));
     }
-  };
+  };  
 
   const handleSubmitAllPredictions = async () => {
-    const selectedFixtures = filteredFixtures.filter(
-      (fixture: any) =>
-        homePredictions[fixture.fixtureId] !== null && awayPredictions[fixture.fixtureId] !== null
-    );
-
+    const selectedFixtures = filteredFixtures.filter((fixture: any) => {
+      const homePrediction = homePredictions[fixture.fixtureId];
+      const awayPrediction = awayPredictions[fixture.fixtureId];
+      return (
+        (homePrediction !== null && homePrediction !== undefined) ||
+        (awayPrediction !== null && awayPrediction !== undefined)
+      );
+    });
     if (selectedFixtures.length > 0) {
       setSubmitting(true);
       setSubmitResult(null);
-
+  
       try {
         const userId = currentUser?.id;
         if (userId) {
@@ -161,16 +169,21 @@ const PredictionsList: FC<PredictionsListProps> = () => {
             const homePrediction = homePredictions[fixture.fixtureId];
             const awayPrediction = awayPredictions[fixture.fixtureId];
             try {
-              const response = await submitPrediction(userId, fixture.fixtureId, homePrediction, awayPrediction);
-              return response;
+              const existingPrediction = await getPrediction(userId, fixture.fixtureId);
+              if (existingPrediction.length > 0) {
+                const response = await editPrediction(userId, fixture.fixtureId, homePrediction, awayPrediction);
+                return response;
+              } else {
+                const response = await submitPrediction(userId, fixture.fixtureId, homePrediction, awayPrediction);
+                return response;
+              }
             } catch (error) {
-              console.error(`Failed to submit prediction for fixture ${fixture.fixtureId}`, error);
+              console.error(`Failed to submit/edit prediction for fixture ${fixture.fixtureId}`, error);
               return null;
             }
           });
-
           const submissionResults = await Promise.all(submissionPromises);
-
+  
           const hasError = submissionResults.some((result) => result === null);
           if (hasError) {
             setSubmitResult('error');
@@ -179,13 +192,13 @@ const PredictionsList: FC<PredictionsListProps> = () => {
           }
         }
       } catch (error) {
-        console.error('Failed to submit predictions', error);
+        console.error('Failed to submit/edit predictions', error);
         setSubmitResult('error');
       } finally {
         setSubmitting(false);
       }
     }
-  };
+  };  
 
   const filteredFixtures = useMemo(() => {
     const currentDate = new Date().getTime();

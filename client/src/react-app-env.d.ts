@@ -88,3 +88,5 @@ interface FixtureRowProps {
 interface PredictionsListProps {
   onSubmitAllPredictions: () => void;
 }
+
+interface NavbarProps {}

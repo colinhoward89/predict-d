@@ -1,1 +1,40 @@
-.Navbar {}
+.Navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  text-align: center;
+  background-color: #00005D;
+  z-index: 1000;
+}
+
+.NavbarMain {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  margin: 0;
+}
+
+.NavbarLink {
+  border-radius: 2rem;
+  padding: 0.5rem 2rem;
+  display: inline-block;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+  margin: 0 2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: 'Poppins', sans-serif;
+}
+
+@media screen and (max-width: 767px) {
+  .NavbarLink {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+    margin: 0 0.5rem;
+  }
+}

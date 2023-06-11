@@ -77,7 +77,6 @@ const joinLeague = async (req: Request, res: Response) => {
 
 const updateLeague = async (req: Request, res: Response) => {
   try {
-    console.log(req.body);
     const { _id, players } = req.body;
     const { user, points, goals } = players[0];
 

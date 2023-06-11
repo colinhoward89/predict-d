@@ -1,9 +1,7 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Navbar.module.css';
 import { useAuth } from '../../AuthContext';
-
-interface NavbarProps {}
 
 const Navbar: FC<NavbarProps> = () => {
   const navigate = useNavigate();
@@ -18,12 +16,34 @@ const Navbar: FC<NavbarProps> = () => {
   };
 
   return (
-    <div className={styles.Navbar}>
-      <button onClick={() => handleNavigation('/')}>Profile</button>
-      <button onClick={() => handleNavigation('/leagues')}>Leagues</button>
-      <button onClick={() => handleNavigation('/predictions')}>Predictions</button>
-      <button onClick={() => handleNavigation('/logout')}>Logout</button>
-    </div>
+    <nav className={styles.Navbar}>
+      <ul className={styles.NavbarMain}>
+        <li>
+          <button
+            className={styles.NavbarLink}
+            onClick={() => handleNavigation('/leagues')}
+          >
+            Leagues
+          </button>
+        </li>
+        <li>
+          <button
+            className={styles.NavbarLink}
+            onClick={() => handleNavigation('/predictions')}
+          >
+            Predictions
+          </button>
+        </li>
+        <li>
+          <button
+            className={styles.NavbarLink}
+            onClick={() => handleNavigation('/logout')}
+          >
+            Logout
+          </button>
+        </li>
+      </ul>
+    </nav>
   );
 };
 

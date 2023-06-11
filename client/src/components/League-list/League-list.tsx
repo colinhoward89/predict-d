@@ -29,7 +29,7 @@ const LeagueList: FC<LeagueListProps> = () => {
       case 'MyLeagues':
         return <MyLeagues />;
       case 'CreateLeague':
-        return <CreateLeague />;
+        return <CreateLeague onJoinLeague={onHandleJoinLeague}/>;
       case 'JoinLeague':
         return <JoinLeague onJoinLeague={onHandleJoinLeague} />;
       default:

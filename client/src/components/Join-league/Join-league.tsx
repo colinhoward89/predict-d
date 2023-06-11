@@ -5,6 +5,7 @@ import { useAuth } from '../../AuthContext';
 
 const JoinLeague: FC<JoinLeagueProps> = ({ onJoinLeague }) => {
   const [leagues, setLeagues] = useState<League[]>([]);
+  const [loading, setLoading] = useState(true);
   const { currentUser } = useAuth();
 
   useEffect(() => {
@@ -18,6 +19,7 @@ const JoinLeague: FC<JoinLeagueProps> = ({ onJoinLeague }) => {
       if (userId) {
         const response = await getLeaguesToJoin(userId);
         setLeagues(response.map((league: League) => ({ _id: league._id, name: league.name })));
+        setLoading(false);
       }
     } catch (error) {
       console.error('Failed to fetch leagues to join', error);
@@ -43,7 +45,9 @@ const JoinLeague: FC<JoinLeagueProps> = ({ onJoinLeague }) => {
 
   return (
     <div className={styles.JoinLeague}>
-      {leagues.length > 0 ? (
+      {loading ? (
+        <div className={styles.LoadingMessage}>Loading leagues...</div>
+      ) : leagues.length > 0 ? (
         <ul className={styles.JoinLeagueList}>
           {leagues.map((league) => (
             <li key={league._id} className={styles.JoinLeagueItem}>
@@ -60,12 +64,10 @@ const JoinLeague: FC<JoinLeagueProps> = ({ onJoinLeague }) => {
             </li>
           ))}
         </ul>
-      ) : leagues.length === 0 ? (
+      ) : (
         <div className={styles.WarningMessage} role="alert" aria-live="assertive" aria-atomic="true">
           No leagues found
         </div>
-      ) : (
-        <div>Loading leagues...</div>
       )}
     </div>
   );

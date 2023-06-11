@@ -100,3 +100,7 @@ interface MyLeaguesProps {
 interface JoinLeagueProps {
   onJoinLeague: () => void;
 }
+
+interface CreateLeagueProps { 
+  onJoinLeague: () => void;
+}

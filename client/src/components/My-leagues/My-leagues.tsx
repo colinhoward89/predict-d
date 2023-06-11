@@ -1,16 +1,14 @@
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styles from './My-leagues.module.css';
 import { getMyLeagues } from '../../Util/ApiService';
 import { useAuth } from '../../AuthContext';
 import LeagueTable from '../League-table/League-table';
 
-interface MyLeaguesProps {}
-
 const MyLeagues: FC<MyLeaguesProps> = () => {
-  const [leagues, setLeagues] = useState<any[]>([]);
+  const [leagues, setLeagues] = useState<League[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const { currentUser } = useAuth();
-  const [selectedLeague, setSelectedLeague] = useState<any>(null);
+  const [selectedLeague, setSelectedLeague] = useState<League | null>(null);
 
   useEffect(() => {
     if (currentUser) {
@@ -18,6 +16,7 @@ const MyLeagues: FC<MyLeaguesProps> = () => {
     }
   }, [currentUser]);
 
+  // Retrieve leagues that user is part of from the database
   const fetchMyLeagues = async () => {
     try {
       const userId = currentUser?.id;
@@ -32,7 +31,7 @@ const MyLeagues: FC<MyLeaguesProps> = () => {
     }
   };
 
-  const handleLeagueClick = (league: any) => {
+  const handleLeagueClick = (league: League) => {
     setSelectedLeague(league);
   };
 
@@ -44,24 +43,44 @@ const MyLeagues: FC<MyLeaguesProps> = () => {
     <div className={styles.MyLeagues}>
       {selectedLeague ? (
         <>
-          <button onClick={handleBackClick}>Back</button>
+          <button
+            className={styles.ActiveButton}
+            onClick={handleBackClick}
+            aria-label="Go back"
+            title="Go back"
+          >
+            Back
+          </button>
           <LeagueTable league={selectedLeague} />
         </>
       ) : (
         <>
-          <h2>My Leagues</h2>
           {loading ? (
-            <p>Loading leagues...</p>
+            <div
+              className={styles.LoadingMessage}
+              aria-busy="true"
+              aria-describedby="loading-description"
+              id="loading-description"
+            >
+              Loading leagues...
+            </div>
           ) : leagues.length > 0 ? (
-            <ul>
+            <ul className={styles.LeagueList} role="list">
               {leagues.map((league) => (
                 <li key={league._id}>
-                  <button onClick={() => handleLeagueClick(league)}>{league.name}</button>
+                  <button
+                    onClick={() => handleLeagueClick(league)}
+                    aria-label={`Select ${league.name}`}
+                  >
+                    {league.name}
+                  </button>
                 </li>
               ))}
             </ul>
           ) : (
-            <p>No leagues found.</p>
+            <div className={styles.WarningMessage} role="alert" aria-live="assertive">
+              No leagues found
+            </div>
           )}
         </>
       )}

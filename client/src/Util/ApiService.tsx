@@ -34,10 +34,15 @@ export const createUser = async (email: UserData['email'], team: UserData['team'
       },
       body: JSON.stringify(requestBody),
     });
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message);
+    }
     const user = await response.json();
     return user;
   } catch (error) {
     console.error("Error creating user:", error);
+    throw error;
   }
 };
 
@@ -275,11 +280,9 @@ export const getAllPredictions = async () => {
 
 
 export const updateLeague = async (league: any) => {
-  console.log(league._id)
   if (league._id === null) {
     throw new Error('League ID is null');
   }
-
   try {
     const response = await fetch(`${BASE_URL}/updateleague/${league._id}`, {
       method: 'PUT',

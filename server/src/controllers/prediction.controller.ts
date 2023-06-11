@@ -69,7 +69,6 @@ const editPredict = async (req: Request, res: Response) => {
 
 const updatePrediction = async (req: Request, res: Response) => {
   try {
-    console.log(req.body)
     const { points, goals, updated, ID } = req.body;
 
     // Find the prediction by predictionId

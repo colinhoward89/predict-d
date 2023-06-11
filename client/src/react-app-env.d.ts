@@ -30,7 +30,7 @@ interface Competition {
 }
 
 interface League {
-  id: string;
+  _id: string;
   name: string;
 }
 
@@ -90,3 +90,13 @@ interface PredictionsListProps {
 }
 
 interface NavbarProps {}
+
+interface LeagueListProps {}
+
+interface MyLeaguesProps {
+  leagueId?: string;
+}
+
+interface JoinLeagueProps {
+  onJoinLeague: () => void;
+}

@@ -1,4 +1,4 @@
-import React, { FC, useContext, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 import styles from './League-list.module.css';
 import { AuthContext } from './../../AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -6,10 +6,8 @@ import MyLeagues from '../My-leagues/My-leagues';
 import CreateLeague from '../Create-league/Create-league';
 import JoinLeague from '../Join-league/Join-league';
 
-interface LeagueListProps {}
-
 const LeagueList: FC<LeagueListProps> = () => {
-  const { currentUser, isAuthenticated, handleGetUser } = useContext(AuthContext);
+  const { isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
   const [activeComponent, setActiveComponent] = useState('MyLeagues');
 
@@ -21,6 +19,11 @@ const LeagueList: FC<LeagueListProps> = () => {
     }
   };
 
+  // When you join a league it will take you back to the My Leagues tab
+  const onHandleJoinLeague = () => {
+    setActiveComponent('MyLeagues');
+  };
+
   const renderComponent = () => {
     switch (activeComponent) {
       case 'MyLeagues':
@@ -28,20 +31,48 @@ const LeagueList: FC<LeagueListProps> = () => {
       case 'CreateLeague':
         return <CreateLeague />;
       case 'JoinLeague':
-        return <JoinLeague />;
+        return <JoinLeague onJoinLeague={onHandleJoinLeague} />;
       default:
         return null;
     }
   };
 
   return (
-    <div>
-      <div>
-        <button onClick={() => handleNavigation('MyLeagues')}>My Leagues</button>
-        <button onClick={() => handleNavigation('CreateLeague')}>Create League</button>
-        <button onClick={() => handleNavigation('JoinLeague')}>Join League</button>
+    <div className={styles.LeagueListContainer}>
+      <nav>
+        <div className={styles.ButtonContainer}>
+          <button
+            onClick={() => handleNavigation('MyLeagues')}
+            className={activeComponent === 'MyLeagues' ? styles.ActiveButton : ''}
+            aria-label="My Leagues"
+            aria-pressed={activeComponent === 'MyLeagues'}
+            tabIndex={0}
+          >
+            My Leagues
+          </button>
+          <button
+            onClick={() => handleNavigation('CreateLeague')}
+            className={activeComponent === 'CreateLeague' ? styles.ActiveButton : ''}
+            aria-label="Create League"
+            aria-pressed={activeComponent === 'CreateLeague'}
+            tabIndex={0}
+          >
+            Create League
+          </button>
+          <button
+            onClick={() => handleNavigation('JoinLeague')}
+            className={activeComponent === 'JoinLeague' ? styles.ActiveButton : ''}
+            aria-label="Join League"
+            aria-pressed={activeComponent === 'JoinLeague'}
+            tabIndex={0}
+          >
+            Join League
+          </button>
+        </div>
+      </nav>
+      <div className={styles.Content}>
+        {renderComponent()}
       </div>
-      {renderComponent()}
     </div>
   );
 };

@@ -1,1 +1,104 @@
-.PredictionsList {}
+.PredictionsList {
+  margin-top: 6rem;
+  padding-bottom: 2rem;
+}
+
+.Container {
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 2rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 28rem;
+}
+
+
+.ButtonsContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.ButtonsContainer button {
+  border: none;
+  background-color: #00005d;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+  margin-right: 1rem;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  border-radius: 2rem;
+}
+
+.ButtonsContainer button:hover {
+  background-color: #0000a0;
+}
+
+.ButtonsContainer .ActiveButton {
+  background-color: #0063b7;
+}
+
+.Table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+
+.Table th,
+.Table td {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+}
+
+.Table th:first-child,
+.Table td:first-child {
+  text-align: left;
+}
+
+.SubmitAllButton {
+  margin: 1rem;
+  border: none;
+  border-radius: 2rem;
+  padding: 0.5rem 2rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: 'Poppins', sans-serif;
+  background-color: #00005D;
+  color: #ffffff;
+}
+
+.SubmitAllButton:focus,
+.SubmitAllButton:hover {
+  background-color: #0000A0;
+}
+
+.SubmitAllButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.SuccessMessage {
+  color: green;
+  margin-top: 10px;
+}
+
+.ErrorMessage {
+  color: red;
+  margin-top: 10px;
+}
+
+.leftAligned {
+  text-align: left;
+}

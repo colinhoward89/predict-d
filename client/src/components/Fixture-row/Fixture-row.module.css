@@ -1,8 +1,44 @@
 .logo {
-    width: 24px;
-    height: 24px;
+    width: 15px;
+    height: 15px;
   }
 
   .predictionInput {
     width: 30px;
   }
+
+.SubmitButton {
+  border: none;
+  border-radius: 2rem;
+  padding: 0.25rem 1rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: 'Poppins', sans-serif;
+  background-color: #00005D;
+  color: #ffffff;
+}
+
+.SubmitButton:focus,
+.SubmitButton:hover {
+  background-color: #0000A0;
+}
+
+.tableCell {
+  margin-right: 30px;
+  padding-bottom: 5px;
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.score {
+  text-align: center;
+}

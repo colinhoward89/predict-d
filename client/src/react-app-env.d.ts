@@ -32,6 +32,9 @@ interface Competition {
 interface League {
   _id: string;
   name: string;
+  competition: number;
+  admin: string;
+  players: Array;
 }
 
 interface Fixture {
@@ -79,14 +82,14 @@ interface FixtureRowProps {
   };
   homePrediction: number | null;
   awayPrediction: number | null;
+  predictionPoints: number | null;
   submitState: { submitting: boolean; submitResult: string };
-  onHomePredictionChange: (fixtureId: number, value: number | null) => void;
-  onAwayPredictionChange: (fixtureId: number, value: number | null) => void;
+  onPredictionChange: (fixtureId: number, value: number | null, isHomePrediction: boolean) => void;
   onSubmitPrediction: (fixtureId: number) => void;
+  past: boolean;
 }
 
 interface PredictionsListProps {
-  onSubmitAllPredictions: () => void;
 }
 
 interface NavbarProps {}
@@ -103,4 +106,10 @@ interface JoinLeagueProps {
 
 interface CreateLeagueProps { 
   onJoinLeague: () => void;
+}
+
+interface Prediction {
+  match: number;
+  home: number | null;
+  away: number | null;
 }

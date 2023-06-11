@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import styles from './Pagination.module.css';
 
 const Pagination: FC<PaginationProps> = ({ fixturesPerPage, totalFixtures, paginate, currentPage }) => {
@@ -20,14 +20,24 @@ const Pagination: FC<PaginationProps> = ({ fixturesPerPage, totalFixtures, pagin
 
   return (
     <div className={styles.pagination}>
-      <button className={hasPrevious ? '' : 'disabled'} onClick={handlePrevious} disabled={!hasPrevious}>
+      <button
+        className={hasPrevious ? styles.button : `${styles.button} ${styles.disabled}`}
+        onClick={handlePrevious}
+        disabled={!hasPrevious}
+        aria-label="Previous"
+      >
         Previous
       </button>
-      <button className={hasNext ? '' : 'disabled'} onClick={handleNext} disabled={!hasNext}>
+      <button
+        className={hasNext ? styles.button : `${styles.button} ${styles.disabled}`}
+        onClick={handleNext}
+        disabled={!hasNext}
+        aria-label="Next"
+      >
         Next
       </button>
     </div>
   );
-};
+}
 
 export default Pagination;

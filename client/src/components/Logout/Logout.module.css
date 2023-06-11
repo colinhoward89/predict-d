@@ -1,1 +1,47 @@
-.Logout {}
+.Logout {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5rem;
+}
+
+.ButtonsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Button {
+  border: none;
+  border-radius: 2rem;
+  padding: 0.5rem 2rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: 'Poppins', sans-serif;
+  color: #ffffff;
+  margin: 0 0.5rem;
+}
+
+.Button:focus,
+.Button:hover {
+  background-color: #0000a0;
+}
+
+.RemainButton {
+  background-color: #00005d;
+}
+
+.LeaveButton {
+  background-color: #ff0000;
+}
+
+.Button.LeaveButton:hover {
+  background-color: #7f0000;
+}

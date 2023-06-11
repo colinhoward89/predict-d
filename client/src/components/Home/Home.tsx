@@ -1,33 +1,25 @@
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import styles from './Home.module.css';
-import { useNavigate } from 'react-router-dom';
 import Login from '../Login/Login';
 import Register from '../Register/Register';
 
 const Home: FC = () => {
   const [currentTab, setCurrentTab] = useState('login');
-  const navigate = useNavigate();
 
   const handleTabChange = (tab: string) => {
     setCurrentTab(tab);
   };
 
-  const handleAuthentication = () => {
-    navigate('/leagues');
-  };
-
   return (
-    <div className={styles.Home}>
-      {currentTab === 'login' ? (
-        <Login />
-      ) : (
-        <Register />
-      )}
-      <div className={styles.TabContainer}>
+    <main className={styles.Home}>
+      <nav className={styles.TabContainer}>
         <button
           type="button"
           className={currentTab === 'login' ? styles.ActiveTab : ''}
           onClick={() => handleTabChange('login')}
+          aria-label="Login"
+          aria-selected={currentTab === 'login'}
+          role="tab"
         >
           Login
         </button>
@@ -35,11 +27,18 @@ const Home: FC = () => {
           type="button"
           className={currentTab === 'register' ? styles.ActiveTab : ''}
           onClick={() => handleTabChange('register')}
+          aria-label="Register"
+          aria-selected={currentTab === 'register'}
+          role="tab"
         >
           Register
         </button>
-      </div>
-    </div>
+      </nav>
+      <section className={styles.ContentContainer}>
+        {currentTab === 'login' && <Login />}
+        {currentTab === 'register' && <Register />}
+      </section>
+    </main>
   );
 };
 

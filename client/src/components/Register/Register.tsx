@@ -7,10 +7,10 @@ import { useAuth } from '../../AuthContext';
 const Register: React.FC = () => {
   const navigate = useNavigate();
   const { handleGetUser } = useAuth();
-
   const [email, setEmail] = useState('');
   const [team, setTeam] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -25,49 +25,82 @@ const Register: React.FC = () => {
   };
 
   const validateForm = () => {
-    return (
-      !email ||
-      !team ||
-      !password
-    );
+    return !email || !team || !password;
   };
 
+  /* If user or team name exists it alerts user otherwise sets user as
+  authorised and navigates to Leagues page */
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const response = await createUser(email, team, password);
       if (response.error) {
-        console.error('Registration failed');
+        setErrorMessage(response.message || 'Registration failed');
       } else {
         handleGetUser(email);
         navigate('/leagues');
       }
-    } catch (error) {
-      console.error('Registration failed', error);
+    } catch (error: any) {
+      console.error('Registration failed', error.message);
+      setErrorMessage('Could not create user');
     }
   };
 
   return (
-    <div>
-      <h2>Register</h2>
+    <div className={styles.Register}>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Email:</label>
-          <input type="email" placeholder="name@mail.com" value={email} onChange={handleEmailChange} required />
+          <label htmlFor="email" className={styles.HiddenLabel}>Email</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="Enter Email"
+            value={email}
+            onChange={handleEmailChange}
+            required
+            aria-label="Email"
+          />
         </div>
         <div>
-          <label>Team:</label>
-          <input type="text" placeholder="Nostradamus" value={team} onChange={handleTeamChange} required />
+          <label htmlFor="team name" className={styles.HiddenLabel}>Team</label>
+          <input
+            type="text"
+            id="team"
+            placeholder="Enter Team Name"
+            value={team}
+            onChange={handleTeamChange}
+            required
+            aria-label="Team"
+          />
         </div>
         <div>
-          <label>Password:</label>
-          <input type="password" placeholder="******" value={password} onChange={handlePasswordChange} required />
+          <label htmlFor="password" className={styles.HiddenLabel}>Password</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter Password"
+            value={password}
+            onChange={handlePasswordChange}
+            required
+            aria-label="Password"
+          />
         </div>
-        <button type="submit" disabled={validateForm()}>Register</button>
+        <button
+          type="submit"
+          disabled={validateForm()}
+          aria-label="Register Button"
+          className={styles.RegisterButton}
+        >
+          Register
+        </button>
+        {errorMessage && (
+          <p className={styles.ErrorMessage} role="alert" aria-live="assertive">
+            {errorMessage}
+          </p>
+        )}
       </form>
     </div>
   );
 };
 
 export default Register;
-

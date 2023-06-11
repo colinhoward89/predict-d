@@ -2,6 +2,7 @@ import React from 'react';
 import { logout } from './../../Util/ApiService';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './../../AuthContext';
+import styles from './Logout.module.css';
 
 const Logout: React.FC = () => {
   const navigate = useNavigate();
@@ -10,18 +11,31 @@ const Logout: React.FC = () => {
   const handleLogout = async () => {
     await logout();
     handleGetUser(''); // Reset currentUser to null
-    navigate('/'); // Navigate to the homepage or any desired route after logout
+    navigate('/'); // Navigate to the homepage after logout
   };
 
   return (
-    <div>
-      <h2>Are you sure you want to log out?</h2>
-      <button type="button" onClick={() => navigate('/leagues')}>
-        No
-      </button>
-      <button type="button" onClick={handleLogout}>
-        Yes
-      </button>
+    <div className={styles.Logout} aria-label="Logout">
+      <div className={styles.ButtonsContainer}>
+        <button
+          type="button"
+          id="remainButton"
+          onClick={() => navigate('/leagues')}
+          role="button"
+          className={`${styles.Button} ${styles.RemainButton}`}
+        >
+          Remain
+        </button>
+        <button
+          type="button"
+          id="leaveButton"
+          onClick={handleLogout}
+          role="button"
+          className={`${styles.Button} ${styles.LeaveButton}`}
+        >
+          Leave
+        </button>
+      </div>
     </div>
   );
 };

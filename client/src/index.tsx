@@ -5,6 +5,15 @@ import { AuthProvider } from './AuthContext';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+const setViewportMetaTag = () => {
+  const meta = document.createElement('meta');
+  meta.name = 'viewport';
+  meta.content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no';
+  document.head.appendChild(meta);
+};
+
+setViewportMetaTag();
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );

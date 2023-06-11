@@ -6,4 +6,8 @@ body {
   font-family: 'Poppins', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: url('../public/background.jpg');
+  background-repeat: repeat;
+  background-size: 250%;
+  background-position: top 50vh;
 }

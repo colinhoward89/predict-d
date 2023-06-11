@@ -5,15 +5,23 @@ import bcrypt from 'bcrypt';
 const createUser = async (req: Request, res: Response) => {
   const { email, password, team } = req.body;
   try {
-    const user = await User.findOne({ email: email });
-    if (user) {
-      return res
-        .status(409)
-        .send({ error: '409', message: 'User already exists' });
+    const existingUser = await User.findOne({
+      $or: [{ email: email }, { team: team }],
+    });
+
+    if (existingUser) {
+      if (existingUser.email === email) {
+        return res.status(409).send({ error: '409', message: 'Email already exists' });
+      }
+      if (existingUser.team === team) {
+        return res.status(409).send({ error: '409', message: 'Team name already exists' });
+      }
     }
+
     if (password === '') {
-      throw new Error();
+      throw new Error('Password is required');
     }
+
     const hash = await bcrypt.hash(password, 10);
     const newUser = new User({
       email: email,
@@ -25,8 +33,8 @@ const createUser = async (req: Request, res: Response) => {
       req.session.uid = savedUser._id;
     }
     res.status(201).send(savedUser);
-  } catch (error) {
-    res.status(400).send({ error, message: 'Could not create user' });
+  } catch (error: any) {
+    res.status(400).send({ error: error.message || 'Could not create user' });
   }
 };
 

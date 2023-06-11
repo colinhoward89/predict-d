@@ -1,1 +1,48 @@
-.Home {}
+.Home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.TabContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.TabContainer button {
+  border: none;
+  border-radius: 2rem;
+  padding: 0.5rem 2rem;
+  display: inline-block;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+  margin: 0 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: 'Poppins', sans-serif;
+  background-color: #00005D;
+  color: #ffffff;
+}
+
+.TabContainer button:focus,
+.TabContainer button:hover {
+  background-color: #0000A0;
+}
+
+.TabContainer .ActiveTab {
+  background-color: #0063b7;
+}
+
+.ContentContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+}
+

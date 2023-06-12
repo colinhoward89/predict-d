@@ -2,13 +2,13 @@ import { FC, useEffect, useState } from 'react';
 import styles from './League-table.module.css';
 import { updateLeague, updatePrediction } from '../../Util/ApiService';
 
-//TODO render calculated points on first load
+//TODO render calculated points on first load adn remove anys
 
 const LeagueTable: FC<LeagueTableProps> = ({ league, userTeams, fixtures, predictions }) => {
   const { players } = league;
   const [loading, setLoading] = useState<boolean>(true);
-  console.log(predictions)
 
+  // Add up scores from previously predicted games and update league tables
   const updatePlayerData = async () => {
     try {
       for (const player of players) {
@@ -20,13 +20,13 @@ const LeagueTable: FC<LeagueTableProps> = ({ league, userTeams, fixtures, predic
                 prediction.user === userTeam.id &&
                 prediction.match === fixture.fixtureId &&
                 !prediction.updated
-            );        
-  
+            );
+
             if (prediction) {
               prediction.updated = true;
               let points = 0;
               let goals = 0;
-  
+
               if (
                 prediction.home === fixture.score.home &&
                 prediction.away === fixture.score.away &&
@@ -40,7 +40,7 @@ const LeagueTable: FC<LeagueTableProps> = ({ league, userTeams, fixtures, predic
                 (prediction.home < prediction.away && fixture.score.home < fixture.score.away)
               ) {
                 points = 3;
-  
+
                 if (
                   prediction.home === fixture.score.home ||
                   prediction.away === fixture.score.away ||
@@ -49,7 +49,7 @@ const LeagueTable: FC<LeagueTableProps> = ({ league, userTeams, fixtures, predic
                   points += 1;
                 }
               }
-  
+
               const updatedPrediction = {
                 points: points,
                 goal: goals > 0,
@@ -72,24 +72,14 @@ const LeagueTable: FC<LeagueTableProps> = ({ league, userTeams, fixtures, predic
           }
         }
       }
+
     } catch (error) {
       console.error('Error while calculating points:', error);
     }
   };
 
-  useEffect(() => {
-    updatePlayerData()
-  }, [])
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(timeout);
-  }, []);
-
-  const sortedPlayers = () => {
+  // sort table by points and then goals (correct scores) if tied
+  const sortPlayers = (players: any) => {
     try {
       return players.sort((a: any, b: any) => {
         if (a.points !== b.points) {
@@ -103,6 +93,18 @@ const LeagueTable: FC<LeagueTableProps> = ({ league, userTeams, fixtures, predic
       return players;
     }
   };
+
+  useEffect(() => {
+    updatePlayerData();
+  }, []);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <div>
@@ -122,7 +124,7 @@ const LeagueTable: FC<LeagueTableProps> = ({ league, userTeams, fixtures, predic
                 </tr>
               </thead>
               <tbody>
-                {sortedPlayers().map((player: any, index: number) => {
+                {sortPlayers(players).map((player: any, index: number) => {
                   const userTeam = userTeams.find((user: any) => user.id === player.user);
                   const teamName = userTeam ? userTeam.team : '';
                   return (

@@ -33,8 +33,8 @@ const createUser = async (req: Request, res: Response) => {
       req.session.uid = savedUser._id;
     }
     res.status(201).send(savedUser);
-  } catch (error: any) {
-    res.status(400).send({ error: error.message || 'Could not create user' });
+  } catch (error) {
+    res.status(400).send({ error: error || 'Could not create user' });
   }
 };
 
@@ -85,8 +85,8 @@ const getUser = async (req: Request, res: Response) => {
       throw new Error('User not found');
     }
     res.status(200).json(existingUser);
-  } catch (err: any) {
-    res.status(500).json(err.message);
+  } catch (error) {
+    res.status(500).json(error);
   }
 };
 
@@ -107,8 +107,8 @@ const editUser = async (req: Request, res: Response) => {
       new: true,
     });
     res.status(200).json(user);
-  } catch (err: any) {
-    res.status(500).json(err.message);
+  } catch (error) {
+    res.status(500).json(error);
   }
 };
 
@@ -117,8 +117,8 @@ const deleteUser = async (req: Request, res: Response) => {
     let id = req.params.id;
     const user = await User.deleteOne({ _id: id });
     res.status(200).json(`User with id:${id} was successfully deleted.`);
-  } catch (err: any) {
-    res.status(500).json(err.message);
+  } catch (error) {
+    res.status(500).json(error);
   }
 };
 

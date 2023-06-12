@@ -40,8 +40,8 @@ const Register: React.FC = () => {
         handleGetUser(email);
         navigate('/leagues');
       }
-    } catch (error: any) {
-      console.error('Registration failed', error.message);
+    } catch (error) {
+      console.error('Registration failed', error);
       setErrorMessage('Could not create user');
     }
   };

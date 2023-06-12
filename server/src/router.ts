@@ -20,6 +20,7 @@ router.get("/competitions", compCont.getAllComps);
 router.get("/:compid/fixtures", fixtCont.getAllFixtures);
 
 router.post("/createleague", leagueCont.createLeague);
+router.get("/league/:id", leagueCont.getLeague);
 router.get("/myleagues/:id", leagueCont.getMyLeagues);
 router.get("/joinleagues/:id", leagueCont.getLeaguesToJoin);
 router.put("/joinleague", leagueCont.joinLeague);

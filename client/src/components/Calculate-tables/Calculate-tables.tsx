@@ -10,7 +10,7 @@ const CalculateTables: FC<CalculateTablesProps> = ({ league }) => {
   const [predictions, setPredictions] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-//TODO fix loading screen
+//TODO fix loading screen and remove anys
 
   useEffect(() => {
     fetchUsers()
@@ -19,6 +19,7 @@ const CalculateTables: FC<CalculateTablesProps> = ({ league }) => {
     filterPredictions();
   }, [])
 
+  // Get users from databse
   const fetchUsers = async () => {
     try {
       const users = await getAllUsers()
@@ -28,6 +29,7 @@ const CalculateTables: FC<CalculateTablesProps> = ({ league }) => {
     }
   };
 
+  // Get fixtures from database
   const fetchFixtures = async () => {
     try {
       const fixturesResponse = await getAllFixturesFiltered(league.competition);
@@ -37,6 +39,7 @@ const CalculateTables: FC<CalculateTablesProps> = ({ league }) => {
     }
   };
 
+  // Get predictions from database
   const fetchPredictions = async () => {
     try {
       const predictionsResponse = await getAllPredictions();
@@ -46,6 +49,8 @@ const CalculateTables: FC<CalculateTablesProps> = ({ league }) => {
     }
   }
 
+  /* Filter predictions so that only those that match fixtures in this competition
+  that haven't been previously are kept for points calculation */
   const filterPredictions = async () => {
     try {
       const predictionsFiltered = predictions.filter((prediction: any) => {

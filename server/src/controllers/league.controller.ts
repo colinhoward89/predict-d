@@ -28,6 +28,17 @@ const createLeague = async (req: Request, res: Response) => {
   }
 };
 
+const getLeague = async (req: Request, res: Response) => {
+  try {
+    const leagueId = req.params.id;
+    const league = await League.find({ _id: leagueId });
+    res.status(200).json(league);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+};
+
 const getMyLeagues = async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
@@ -105,4 +116,4 @@ const updateLeague = async (req: Request, res: Response) => {
   }
 };
 
-export { createLeague, getMyLeagues, getLeaguesToJoin, joinLeague, updateLeague };
+export { createLeague, getLeague, getMyLeagues, getLeaguesToJoin, joinLeague, updateLeague };

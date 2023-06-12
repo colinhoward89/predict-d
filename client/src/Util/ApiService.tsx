@@ -170,6 +170,23 @@ export const createLeague = async (name: string, competition: number, admin: str
   }
 };
 
+export const getLeague = async (leagueId: string) => {
+  try {
+    const response = await fetch(`${BASE_URL}/league/${leagueId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const league = await response.json();
+    return league.players;
+  } catch (error) {
+    console.error('Failed to get leagues', error);
+    throw new Error('Failed to get leagues');
+  }
+};
+
+
 export const getMyLeagues = async (userId: string) => {
   try {
     const response = await fetch(`${BASE_URL}/myleagues/${userId}`, {
@@ -300,7 +317,6 @@ export const getAllPredictions = async () => {
 
 
 export const updateLeague = async (league: any) => {
-  console.log("I have been called")
   if (league._id === null) {
     throw new Error('League ID is null');
   }

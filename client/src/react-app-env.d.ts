@@ -1,5 +1,7 @@
 /// <reference types="react-scripts" />
 
+// TODO remove anys
+
 interface UserData {
   email: string;
   password: string;

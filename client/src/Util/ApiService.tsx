@@ -300,6 +300,7 @@ export const getAllPredictions = async () => {
 
 
 export const updateLeague = async (league: any) => {
+  console.log("I have been called")
   if (league._id === null) {
     throw new Error('League ID is null');
   }
@@ -323,6 +324,7 @@ export const updateLeague = async (league: any) => {
 
 
 export const updatePrediction = async (predictionId: number, updatedPrediction: any) => {
+
   try {
     const response = await fetch(`${BASE_URL}/updatepredictions/${predictionId}`, {
       method: 'PUT',

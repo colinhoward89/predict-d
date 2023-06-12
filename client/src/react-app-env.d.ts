@@ -117,6 +117,8 @@ interface Prediction {
 interface LeagueTableProps {
   league: League;
   userTeams: userTeams;
+  fixtures: any;
+  predictions: any;
 }
 
 interface CalculateTablesProps {

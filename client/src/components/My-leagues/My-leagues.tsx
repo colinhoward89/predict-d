@@ -65,7 +65,7 @@ const MyLeagues: FC<MyLeaguesProps> = () => {
               Loading leagues...
             </div>
           ) : leagues.length > 0 ? (
-            <ul className={styles.LeagueList} role="list">
+            <ul className={styles.LeagueList}>
               {leagues.map((league) => (
                 <li key={league._id}>
                   <button

@@ -21,7 +21,6 @@ const Logout: React.FC = () => {
           type="button"
           id="remainButton"
           onClick={() => navigate('/leagues')}
-          role="button"
           className={`${styles.Button} ${styles.RemainButton}`}
         >
           Remain
@@ -30,7 +29,6 @@ const Logout: React.FC = () => {
           type="button"
           id="leaveButton"
           onClick={handleLogout}
-          role="button"
           className={`${styles.Button} ${styles.LeaveButton}`}
         >
           Leave

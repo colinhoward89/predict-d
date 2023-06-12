@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import styles from './My-leagues.module.css';
 import { getMyLeagues } from '../../Util/ApiService';
 import { useAuth } from '../../AuthContext';
-import LeagueTable from '../League-table/League-table';
+import CalculateTables from '../Calculate-tables/Calculate-tables';
 
 const MyLeagues: FC<MyLeaguesProps> = () => {
   const [leagues, setLeagues] = useState<League[]>([]);
@@ -51,7 +51,7 @@ const MyLeagues: FC<MyLeaguesProps> = () => {
           >
             Back
           </button>
-          <LeagueTable league={selectedLeague} />
+          <CalculateTables league={selectedLeague} />
         </>
       ) : (
         <>

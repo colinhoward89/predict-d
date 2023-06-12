@@ -4,7 +4,13 @@ export const getAllUsers = async () => {
   try {
     const response = await fetch(`${BASE_URL}/get-all-users`);
     const users = await response.json();
-    return users;
+    
+    const userTeamsData = users.map((user: any) => ({
+      id: user._id,
+      team: user.team,
+    }));
+
+    return userTeamsData;
   } catch (error) {
     console.error("Error getting users:", error);
   }
@@ -46,7 +52,7 @@ export const createUser = async (email: UserData['email'], team: UserData['team'
   }
 };
 
-export const login = (email: string, password: string): Promise<any> => {
+export const login = async (email: string, password: string): Promise<any> => {
   const requestBody = {
     email: email,
     password: password
@@ -119,6 +125,22 @@ export const getAllFixtures = async (compID: Competition["id"]) => {
   }
 };
 
+export const getAllFixturesFiltered = async (compID: Competition["id"]) => {
+  try {
+    const response = await fetch(`${BASE_URL}/${compID}/fixtures`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const fixtures = await response.json();
+    const fixturesFiltered = fixtures.filter((fixture: Fixture) => fixture.status === 'FT');
+    return fixturesFiltered;
+  } catch (error) {
+    console.error("Error retrieving fixtures:", error);
+  }
+};
+
 export const createLeague = async (name: string, competition: number, admin: string) => {
   try {
     const response = await fetch(`${BASE_URL}/createleague`, {
@@ -141,9 +163,7 @@ export const createLeague = async (name: string, competition: number, admin: str
       }),
     });
     if (response.ok) {
-      // Handle successful creation of the league
     } else {
-      // Handle error response
     }
   } catch (error) {
     console.error('Failed to create league', error);

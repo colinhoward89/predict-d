@@ -61,7 +61,6 @@ const PredictionsList: FC<PredictionsListProps> = () => {
       const userId = currentUser?.id;
       if (userId) {
         const leagues = await getMyLeagues(userId);
-        console.log(leagues)
         const fixturesPromises = leagues.map(async (league: League) => {
           try {
             const response = await getAllFixtures(league.competition);

@@ -1,17 +1,13 @@
-import { FC, useEffect, useState, useContext } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styles from './League-table.module.css';
-import { updateLeague, updatePrediction, getAllPredictions } from '../../Util/ApiService';
-import PredictionContext from '../../PredictionContext';
+import { updateLeague, updatePrediction } from '../../Util/ApiService';
 
-//TODO fix logic so it doesn't duplicate points and goals in DB
+//TODO render calculated points on first load
 
 const LeagueTable: FC<LeagueTableProps> = ({ league, userTeams, fixtures, predictions }) => {
   const { players } = league;
   const [loading, setLoading] = useState<boolean>(true);
-  const [renderTable, setRenderTable] = useState<boolean>(false);
-  const [statePredictions, setPredictions] = useState<any[]>(predictions);
-  const { updatedPredictions, setUpdatedPredictions } = useContext(PredictionContext);
-  const [updatesPerformed, setUpdatesPerformed] = useState<boolean>(false);
+  console.log(predictions)
 
   const updatePlayerData = async () => {
     try {
@@ -23,17 +19,14 @@ const LeagueTable: FC<LeagueTableProps> = ({ league, userTeams, fixtures, predic
               (prediction: any) =>
                 prediction.user === userTeam.id &&
                 prediction.match === fixture.fixtureId &&
-                !prediction.updated &&
-                !updatedPredictions.includes(prediction._id)
-            );
-
+                !prediction.updated
+            );        
+  
             if (prediction) {
-              setUpdatedPredictions([...updatedPredictions, prediction._id])
-              console.log(updatedPredictions)
               prediction.updated = true;
               let points = 0;
               let goals = 0;
-
+  
               if (
                 prediction.home === fixture.score.home &&
                 prediction.away === fixture.score.away &&
@@ -47,7 +40,7 @@ const LeagueTable: FC<LeagueTableProps> = ({ league, userTeams, fixtures, predic
                 (prediction.home < prediction.away && fixture.score.home < fixture.score.away)
               ) {
                 points = 3;
-
+  
                 if (
                   prediction.home === fixture.score.home ||
                   prediction.away === fixture.score.away ||
@@ -56,7 +49,7 @@ const LeagueTable: FC<LeagueTableProps> = ({ league, userTeams, fixtures, predic
                   points += 1;
                 }
               }
-
+  
               const updatedPrediction = {
                 points: points,
                 goal: goals > 0,
@@ -64,53 +57,35 @@ const LeagueTable: FC<LeagueTableProps> = ({ league, userTeams, fixtures, predic
                 ID: prediction._id,
               };
               await updatePrediction(prediction._id, updatedPrediction);
-
-              const playerIndex = players.findIndex((p: any) => p.user.toString() === player.user.toString());
-              if (playerIndex !== -1) {
-                players[playerIndex] = {
-                  ...players[playerIndex],
-                  points: players[playerIndex].points + points,
-                  goals: players[playerIndex].goals + goals,
-                  predictions: [...players[playerIndex].predictions, prediction.match],
-                };
-              }
+              await updateLeague({
+                _id: league._id,
+                players: [
+                  {
+                    user: player.user,
+                    points: points,
+                    goals: goals,
+                    predictions: [prediction.match],
+                  },
+                ],
+              });
             }
           }
         }
-      }
-      if (!updatesPerformed) {
-        await updateLeague({
-          ...league,
-          players: players,
-        });
-        setUpdatesPerformed(true);
-        console.log("League updated successfully");
       }
     } catch (error) {
       console.error('Error while calculating points:', error);
     }
   };
 
-  const fetchPredictions = async () => {
-    try {
-      const predictionsResponse = await getAllPredictions();
-      setPredictions(predictionsResponse);
-    } catch (error) {
-      console.error('Error while fetching prediction data:', error);
-    }
-  }
-
   useEffect(() => {
     updatePlayerData()
-    fetchPredictions()
   }, [])
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setRenderTable(true);
-    }, 3000);
+      setLoading(false);
+    }, 1000);
 
-    setLoading(false);
     return () => clearTimeout(timeout);
   }, []);
 
@@ -133,7 +108,7 @@ const LeagueTable: FC<LeagueTableProps> = ({ league, userTeams, fixtures, predic
     <div>
       {loading ? (
         <p className={styles.p}>Loading...</p>
-      ) : renderTable ? (
+      ) : (
         <div className={styles.Container}>
           <div className={styles.LeagueTable}>
             <h2>{league.name} Table</h2>
@@ -172,7 +147,7 @@ const LeagueTable: FC<LeagueTableProps> = ({ league, userTeams, fixtures, predic
             <p>Correct goal differential and within 2 goals (i.e., predict 3-1 and result is 1-0) = 1 point</p>
           </div>
         </div>
-      ) : null}
+      )}
     </div>
   );
 };

@@ -8,11 +8,9 @@ import Navbar from './components/Navbar/Navbar';
 import Logout from './components/Logout/Logout';
 import LeagueList from './components/League-list/League-list';
 import PredictionsList from './components/Predictions-list/Predictions-list';
-import PredictionContext from './PredictionContext';
 
 function App() {
   const { currentUser, isAuthenticated, handleGetUser } = useAuth();
-  const [updatedPredictions, setUpdatedPredictions] = useState<string[]>([]);
 
   useEffect(() => {
     if (isAuthenticated && currentUser) {
@@ -22,8 +20,6 @@ function App() {
 
   return (
     <AuthProvider>
-<PredictionContext.Provider value={{ updatedPredictions, setUpdatedPredictions }}>
-
     <Router>
       <Navbar />
       <Routes>
@@ -35,7 +31,6 @@ function App() {
         <Route path="/predictions" element={<PredictionsList />} />
       </Routes>
     </Router>
-    </PredictionContext.Provider>
     </AuthProvider>
   );
 }

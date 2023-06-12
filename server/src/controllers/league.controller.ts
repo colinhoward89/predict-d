@@ -78,20 +78,22 @@ const joinLeague = async (req: Request, res: Response) => {
 const updateLeague = async (req: Request, res: Response) => {
   try {
     const { _id, players } = req.body;
-
     const league = await League.findById(_id);
     if (!league) {
       return res.status(404).json({ error: 'League not found' });
     }
 
-    for (const { user, points, goals } of players) {
-      const playerIndex = league.players.findIndex((player) => player.user.toString() === user);
+    for (const { user, points, goals, predictions } of players) {
+      const playerIndex = league.players.findIndex(
+        (player) => player.user.toString() === user
+      );
       if (playerIndex === -1) {
         return res.status(404).json({ error: 'Player not found in the league' });
       }
 
       league.players[playerIndex].points += points;
       league.players[playerIndex].goals += goals;
+      league.players[playerIndex].predictions.push(...predictions);
     }
 
     await league.save();
@@ -102,6 +104,5 @@ const updateLeague = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'An error occurred' });
   }
 };
-
 
 export { createLeague, getMyLeagues, getLeaguesToJoin, joinLeague, updateLeague };

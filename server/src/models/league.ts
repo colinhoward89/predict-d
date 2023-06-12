@@ -21,8 +21,7 @@ const leagueSchema = new mongoose.Schema({
       required: true,
     },
     predictions: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Prediction',
+      type: Number,
       default: 0,
     }],
     points: {

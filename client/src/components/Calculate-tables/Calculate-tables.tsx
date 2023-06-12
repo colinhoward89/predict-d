@@ -9,7 +9,6 @@ const CalculateTables: FC<CalculateTablesProps> = ({ league }) => {
   const [fixtures, setFixtures] = useState<any[]>([]);
   const [predictions, setPredictions] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [renderTable, setRenderTable] = useState<boolean>(false);
 
 //TODO fix loading screen
 
@@ -35,7 +34,6 @@ const CalculateTables: FC<CalculateTablesProps> = ({ league }) => {
       setFixtures(fixturesResponse);
     } catch (error) {
       console.error('Error while fetching data:', error);
-      setLoading(false);
     }
   };
 
@@ -62,10 +60,10 @@ const CalculateTables: FC<CalculateTablesProps> = ({ league }) => {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-        setRenderTable(true);
-      }, 3000);
+      setLoading(false);
+      }, 1000);
 
-    setLoading(false);
+
     return () => clearTimeout(timeout);
   }, []);
 
@@ -73,9 +71,9 @@ const CalculateTables: FC<CalculateTablesProps> = ({ league }) => {
     <div>
       {loading ? (
         <p className={styles.p}>Loading...</p>
-      ) : renderTable ? (
+      ) : (
         <LeagueTable league={league} userTeams={userTeams} fixtures={fixtures} predictions={predictions} />
-      ) : null}
+      )}
     </div>
   );
 };

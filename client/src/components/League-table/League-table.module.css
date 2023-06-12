@@ -1,1 +1,33 @@
-.LeagueTable {}
+.LeagueTable {
+  margin-top: 1rem;
+  padding-bottom: 2rem;
+}
+
+.Table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+
+.Table th,
+.Table td {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+}
+
+.Table th:first-child,
+.Table td:first-child {
+  text-align: left;
+}
+
+.Container {
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 2rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 28rem;
+}

@@ -113,3 +113,7 @@ interface Prediction {
   home: number | null;
   away: number | null;
 }
+
+interface LeagueTableProps {
+  league: League;
+}

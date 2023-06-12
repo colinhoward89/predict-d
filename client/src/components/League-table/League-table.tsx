@@ -2,14 +2,11 @@ import React, { FC, useState, useEffect } from 'react';
 import styles from './League-table.module.css';
 import { getAllUsers, getAllFixtures, getAllPredictions, updateLeague, updatePrediction } from '../../Util/ApiService';
 
-interface LeagueTableProps {
-  league: any;
-}
-
 const LeagueTable: FC<LeagueTableProps> = ({ league }) => {
   const { players } = league;
   const [userTeams, setUserTeams] = useState<any[]>([]);
   const [fixtures, setFixtures] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchUserTeamsAndFixtures = async () => {
@@ -23,7 +20,7 @@ const LeagueTable: FC<LeagueTableProps> = ({ league }) => {
         console.log(userTeamsData)
         // Get all fixtures
         const fixturesResponse = await getAllFixtures(league.competition);
-        const fixtures = fixturesResponse.filter((fixture: any) => fixture.status === 'FT');
+        const fixtures = fixturesResponse.filter((fixture: Fixture) => fixture.status === 'FT');
         setFixtures(fixtures);
         // Get all predictions
         const predictionsResponse = await getAllPredictions();
@@ -104,7 +101,8 @@ const LeagueTable: FC<LeagueTableProps> = ({ league }) => {
       }
     };
     fetchUserTeamsAndFixtures()
-    
+    setLoading(false);
+
   }, []);
 
   const sortedPlayers = players.sort((a: any, b: any) => {
@@ -116,33 +114,57 @@ const LeagueTable: FC<LeagueTableProps> = ({ league }) => {
   });
 
   return (
-    <div className={styles.LeagueTable}>
-      <h2>{league.name} Table</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Position</th>
-            <th>Team</th>
-            <th>Points</th>
-            <th>Goals</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedPlayers.map((player: any, index: number) => {
-            const userTeam = userTeams.find((user: any) => user.id === player.user);
-            const teamName = userTeam ? userTeam.team : '';
-            return (
-              <tr key={player.user}>
-                <td>{index + 1}</td>
-                <td>{teamName}</td>
-                <td>{player.points}</td>
-                <td>{player.goals}</td>
+    loading ? (
+      <p>Loading tables...</p>
+    ) : (
+      <div className={styles.Container}>
+        <div className={styles.LeagueTable}>
+          <h2>{league.name} Table</h2>
+          <table className={styles.Table}>
+            <caption>League Table</caption>
+            <thead>
+              <tr>
+                <th scope="col">Position</th>
+                <th scope="col">Team</th>
+                <th scope="col">Points</th>
+                <th scope="col">Goals</th>
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
+            </thead>
+            <tbody>
+              {sortedPlayers.map((player: any, index: number) => {
+                const userTeam = userTeams.find((user: any) => user.id === player.user);
+                const teamName = userTeam ? userTeam.team : '';
+                return (
+                  <tr key={player.user}>
+                    <th scope="row">{index + 1}</th>
+                    <td>{teamName}</td>
+                    <td>{player.points}</td>
+                    <td>{player.goals}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <div className={styles.Scoring}>
+          <p>
+          Goals are awarded for correct scores
+          </p><p>
+            Correct score with 5+ match goals = 8 points
+          </p><p>
+            Correct score with 4 match goals or less = 5 points
+          </p><p>
+            If you didn't get the score correct, you receive:
+          </p><p>
+            Correct result = 3 points
+          </p><p>
+            Correct home or away goals = 1 point
+          </p><p>
+            Correct goal differential and within 2 goals (i.e. predict 3-1 and result is 1-0) = 1 point
+          </p>
+        </div>
+      </div>
+    )
   );
 };
 

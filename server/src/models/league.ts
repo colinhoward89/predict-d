@@ -22,7 +22,6 @@ const leagueSchema = new mongoose.Schema({
     },
     predictions: [{
       type: Number,
-      default: 0,
     }],
     points: {
       type: Number,

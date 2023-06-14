@@ -35,6 +35,13 @@ const LeagueTable: FC<LeagueTableProps> = ({ league, userTeams, fixtures, predic
                 points = 8;
                 goals = 1;
               } else if (
+                prediction.home === fixture.score.home &&
+                prediction.away === fixture.score.away &&
+                fixture.score.home + fixture.score.away < 5
+              ) {
+                points = 5;
+                goals = 1;
+              } else if (
                 (prediction.home > prediction.away && fixture.score.home > fixture.score.away) ||
                 (prediction.home === prediction.away && fixture.score.home === fixture.score.away) ||
                 (prediction.home < prediction.away && fixture.score.home < fixture.score.away)
@@ -44,12 +51,17 @@ const LeagueTable: FC<LeagueTableProps> = ({ league, userTeams, fixtures, predic
                 if (
                   prediction.home === fixture.score.home ||
                   prediction.away === fixture.score.away ||
-                  Math.abs(prediction.home - prediction.away) === Math.abs(fixture.score.home - fixture.score.away)
+                  (Math.abs(prediction.home - fixture.score.home) <= 1 &&
+                    Math.abs(prediction.away - fixture.score.away) <= 1)
                 ) {
                   points += 1;
                 }
+              } else if (
+                prediction.home === fixture.score.home ||
+                prediction.away === fixture.score.away
+              ) {
+                points = 1;
               }
-
               const updatedPrediction = {
                 points: points,
                 goal: goals > 0,
@@ -72,7 +84,6 @@ const LeagueTable: FC<LeagueTableProps> = ({ league, userTeams, fixtures, predic
           }
         }
       }
-
     } catch (error) {
       console.error('Error while calculating points:', error);
     }

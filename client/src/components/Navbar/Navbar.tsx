@@ -16,12 +16,14 @@ const Navbar: FC<NavbarProps> = () => {
   };
 
   return (
-    <nav className={styles.Navbar}>
-      <ul className={styles.NavbarMain}>
+    <nav className={styles.Navbar} role="navigation">
+      <ul className={styles.NavbarMain} role="menu">
         <li>
           <button
             className={styles.NavbarLink}
             onClick={() => handleNavigation('/leagues')}
+            aria-label="Navigate to Leagues"
+            tabIndex={0}
           >
             Leagues
           </button>
@@ -30,6 +32,7 @@ const Navbar: FC<NavbarProps> = () => {
           <button
             className={styles.NavbarLink}
             onClick={() => handleNavigation('/predictions')}
+            aria-label="Navigate to Predictions"
           >
             Predictions
           </button>
@@ -38,6 +41,7 @@ const Navbar: FC<NavbarProps> = () => {
           <button
             className={styles.NavbarLink}
             onClick={() => handleNavigation('/logout')}
+            aria-label="Log out"
           >
             Logout
           </button>

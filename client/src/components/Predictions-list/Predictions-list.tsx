@@ -1,6 +1,6 @@
 import { FC, useEffect, useState, useMemo } from 'react';
 import styles from './Predictions-list.module.css';
-import { getMyLeagues, getAllFixtures, submitPrediction, getPrediction, editPrediction } from '../../Util/ApiService';
+import { getMyLeagues, getAllFixtures, submitPrediction, getPrediction, editPrediction, getTeamForm, getPredictionsFromAI } from '../../Util/ApiService';
 import { useAuth } from '../../AuthContext';
 import FixtureRow from '../Fixture-row/Fixture-row';
 import Pagination from '../Pagination/Pagination';
@@ -8,6 +8,7 @@ import Pagination from '../Pagination/Pagination';
 const PredictionsList: FC<PredictionsListProps> = () => {
   const [fixtures, setFixtures] = useState<Fixture[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [loadingAI, setLoadingAI] = useState<boolean>(false);
   const [filter, setFilter] = useState<'past' | 'future'>('future');
   const { currentUser } = useAuth();
   const [homePredictions, setHomePredictions] = useState<{ [fixtureId: number]: number | null }>({});
@@ -79,7 +80,7 @@ const PredictionsList: FC<PredictionsListProps> = () => {
     } catch (error) {
       console.error('Failed to fetch fixtures', error);
     }
-  };  
+  };
 
   // Filter for showing past or upcoming fixtures
   const handleFilterChange = (selectedFilter: 'past' | 'future') => {
@@ -198,6 +199,44 @@ const PredictionsList: FC<PredictionsListProps> = () => {
     });
   }, [fixtures, filter]);
 
+  // generate predictions from AI based on last 5 results for each team
+  const predictionFromAI = async () => {
+    setLoadingAI(true);
+    const extractedData: any = [];
+    currentFixtures.forEach(fixture => {
+      const fixtureId = fixture.fixtureId;
+      const homeId = fixture.home.id;
+      const awayId = fixture.away.id;
+
+      extractedData.push({
+        fixtureId: fixtureId,
+        homeId: homeId,
+        awayId: awayId
+      });
+    });
+    const teamFormPromises = extractedData.map(async (data: any) => {
+      const homeTeamForm = await getTeamForm(data.homeId);
+      const awayTeamForm = await getTeamForm(data.awayId);
+      return {
+        fixtureId: data.fixtureId,
+        homeId: data.homeId,
+        awayId: data.awayId,
+        homeTeamForm: homeTeamForm,
+        awayTeamForm: awayTeamForm
+      };
+    });
+    const teamForms = await Promise.all(teamFormPromises);
+    const AIPredictions = await getPredictionsFromAI(teamForms);
+    AIPredictions.forEach((prediction: any) => {
+      const { FixtureID, Score } = prediction;
+      const { Home, Away } = Score;
+
+      handlePredictionChange(FixtureID, Home, true);
+      handlePredictionChange(FixtureID, Away, false);
+    });
+    setLoadingAI(false);
+  }
+
   // logic for pagination
   const indexOfLastFixture = currentPage * fixturesPerPage;
   const indexOfFirstFixture = indexOfLastFixture - fixturesPerPage;
@@ -290,15 +329,27 @@ const PredictionsList: FC<PredictionsListProps> = () => {
               currentPage={currentPage}
             />
             {filter === 'future' && (
-              <button
-                type="button"
-                className={styles.SubmitAllButton}
-                onClick={handleSubmitAllPredictions}
-                disabled={submitting}
-                aria-describedby="submit-all-info"
-              >
-                {submitting ? 'Submitting...' : 'Submit All'}
-              </button>
+              <>
+                <button
+                  type="button"
+                  className={styles.SubmitAllButton}
+                  onClick={handleSubmitAllPredictions}
+                  disabled={submitting}
+                  aria-describedby="submit-all-info"
+                >
+                  {submitting ? 'Submitting...' : 'Submit All'}
+                </button>
+                <div className={styles.ButtonsContainer}>
+                  <button
+                    type="button"
+                    className={styles.Button}
+                    onClick={() => predictionFromAI()}
+                    disabled={loadingAI}
+                  >
+                    {loadingAI ? "Loading..." : "AI"}
+                  </button>
+                </div>
+              </>
             )}
             {submitResult === 'success' && <p>All predictions submitted successfully!</p>}
             {submitResult === 'error' && <p>Failed to submit one or more predictions. Please try again.</p>}

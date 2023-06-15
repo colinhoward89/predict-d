@@ -4,7 +4,7 @@ export const getAllUsers = async () => {
   try {
     const response = await fetch(`${BASE_URL}/get-all-users`);
     const users = await response.json();
-    
+
     const userTeamsData = users.map((user: any) => ({
       id: user._id,
       team: user.team,
@@ -356,5 +356,39 @@ export const updatePrediction = async (predictionId: number, updatedPrediction: 
   } catch (error) {
     console.error('Failed to update prediction:', error);
     throw error;
+  }
+};
+
+export const getTeamForm = async (teamID: any) => {
+  try {
+    const response = await fetch(`${BASE_URL}/teamform/${teamID}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const teamForm = await response.json();
+    return teamForm;
+  } catch (error) {
+    console.error("Error retrieving fixtures:", error);
+  }
+};
+
+export const getPredictionsFromAI = async (teamForms: any) => {
+  try {
+    const response = await fetch(`${BASE_URL}/aipredictions`, {
+      method: "POST",
+      body: JSON.stringify({ teamForms }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+    const formattedResponse = data.aiResponse;
+    const AIPredictions = JSON.parse(formattedResponse.replace(/FixtureID/g, '"FixtureID"').replace(/Score/g, '"Score"').replace(/Home/g, '"Home"').replace(/Away/g, '"Away"'));
+    return AIPredictions;
+  } catch (error) {
+    console.error("Error retrieving fixtures:", error);
   }
 };

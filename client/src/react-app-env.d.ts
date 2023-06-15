@@ -28,6 +28,7 @@ interface Competition {
   name: string;
   type: string;
   logo: string;
+  id: Number;
   countryName: string;
 }
 
@@ -43,10 +44,12 @@ interface Fixture {
   fixtureId: number;
   date: string;
   home: {
+    id: Number;
     logo: string;
     name: string;
   };
   away: {
+    id: Number;
     logo: string;
     name: string;
   };
@@ -69,10 +72,12 @@ interface FixtureRowProps {
     fixtureId: number;
     date: string;
     home: {
+      id: Number;
       logo: string;
       name: string;
     };
     away: {
+      id: Number;
       logo: string;
       name: string;
     };

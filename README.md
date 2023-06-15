@@ -21,11 +21,12 @@ In the `/server` folder, create a file called .env:
 touch .env
 ```
 
-In this file, you will need to store your API-FOOTBALL details from [Rapid API](https://rapidapi.com/api-sports/api/api-football/)
+In this file, you will need to store your API-FOOTBALL details from [Rapid API](https://rapidapi.com/api-sports/api/api-football/) and you will also need an API key from [OpenAI](https://platform.openai.com/account/api-keys).
 
 ```bash
 RAPID_KEY="xxx"
 RAPID_HOST="xxx"
+chatGPT_key="xxx"
 ```
 
 Run `npm i` in order to install all server dependencies and then run `npx nodemon` to start the server.

@@ -18,6 +18,8 @@ router.put("/user/:id", userCont.editUser);
 router.get("/competitions", compCont.getAllComps);
 
 router.get("/:compid/fixtures", fixtCont.getAllFixtures);
+router.get("/teamform/:teamID", fixtCont.getTeamForm);
+router.post("/aipredictions", fixtCont.getAIPredictions);
 
 router.post("/createleague", leagueCont.createLeague);
 router.get("/league/:id", leagueCont.getLeague);

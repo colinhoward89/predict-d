@@ -124,8 +124,8 @@ const getTeamForm = async (req: Request, res: Response) => {
         last: '5'
       },
       headers: {
-        'X-RapidAPI-Key': '2ea41977e7msh2b3365808733ed1p17d968jsn93bfb0bb57ac',
-        'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com'
+        'X-RapidAPI-Key': process.env.RAPID_KEY,
+        'X-RapidAPI-Host': process.env.RAPID_HOST
       }
     });
     const fixtures = response.data.response;

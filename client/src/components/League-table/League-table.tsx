@@ -6,7 +6,7 @@ import { updateLeague, updatePrediction } from '../../Util/ApiService';
 
 const LeagueTable: FC<LeagueTableProps> = ({ league, userTeams, fixtures, predictions }) => {
   const { players } = league;
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   // Add up scores from previously predicted games and update league tables
   const updatePlayerData = async () => {
@@ -51,8 +51,8 @@ const LeagueTable: FC<LeagueTableProps> = ({ league, userTeams, fixtures, predic
                 if (
                   prediction.home === fixture.score.home ||
                   prediction.away === fixture.score.away ||
-                  (Math.abs(prediction.home - fixture.score.home) <= 1 &&
-                    Math.abs(prediction.away - fixture.score.away) <= 1)
+                  (Math.abs(prediction.home - fixture.score.home) <= 2 &&
+                    Math.abs(prediction.away - fixture.score.away) <= 2)
                 ) {
                   points += 1;
                 }
@@ -109,13 +109,13 @@ const LeagueTable: FC<LeagueTableProps> = ({ league, userTeams, fixtures, predic
     updatePlayerData();
   }, []);
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setLoading(false);
-    }, 3000);
+  // useEffect(() => {
+  //   const timeout = setTimeout(() => {
+  //     setLoading(false);
+  //   }, 3000);
 
-    return () => clearTimeout(timeout);
-  }, []);
+  //   return () => clearTimeout(timeout);
+  // }, []);
 
   return (
     <div>

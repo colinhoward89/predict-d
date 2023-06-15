@@ -72,13 +72,14 @@ const PredictionsList: FC<PredictionsListProps> = () => {
         });
         const fixturesArray = await Promise.all(fixturesPromises);
         const allFixtures = fixturesArray.flat();
+        allFixtures.sort((a: Fixture, b: Fixture) => new Date(a.date).getTime() - new Date(b.date).getTime());
         setFixtures(allFixtures);
         fetchPredictions(allFixtures.map((fixture: Fixture) => fixture.fixtureId));
       }
     } catch (error) {
       console.error('Failed to fetch fixtures', error);
     }
-  };
+  };  
 
   // Filter for showing past or upcoming fixtures
   const handleFilterChange = (selectedFilter: 'past' | 'future') => {

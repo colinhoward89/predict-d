@@ -55,6 +55,7 @@ const Login: React.FC = () => {
             onChange={handleEmailChange}
             required
             aria-label="Email"
+            autoComplete="off"
           />
         </div>
         <div>

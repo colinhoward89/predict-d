@@ -70,6 +70,7 @@ const CreateLeague: FC<CreateLeagueProps> = ({ onJoinLeague }) => {
             required
             className={styles.CreateLeagueInput}
             ref={nameInputRef}
+            autoComplete="off"
           />
         </div>
         <div>

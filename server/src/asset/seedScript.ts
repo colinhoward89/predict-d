@@ -40,7 +40,7 @@ async function populateDatabase() {
     const insertedUsers = await User.insertMany(users);
     const userObjectIDs = insertedUsers.map(user => user._id);
     const leagues = [{
-      name: 'Basalt Staff Prediction League',
+      name: 'Cool Kids',
       competition: 131,
       admin: userObjectIDs[0],
       players: [

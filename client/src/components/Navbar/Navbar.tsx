@@ -17,6 +17,9 @@ const Navbar: FC<NavbarProps> = () => {
 
   return (
     <nav className={styles.Navbar} role="navigation">
+      <div className={styles.NavbarLogo}>
+        <img className={styles.Logo} src="predictd.png" alt="Predict'd Logo" />
+      </div>
       <ul className={styles.NavbarMain} role="menu">
         <li>
           <button
@@ -37,16 +40,14 @@ const Navbar: FC<NavbarProps> = () => {
             Predictions
           </button>
         </li>
-        <li>
-          <button
-            className={styles.NavbarLink}
-            onClick={() => handleNavigation('/logout')}
-            aria-label="Log out"
-          >
-            Logout
-          </button>
-        </li>
       </ul>
+      <button
+        className={styles.NavbarLink}
+        onClick={() => handleNavigation('/logout')}
+        aria-label="Log out"
+      >
+        Logout
+      </button>
     </nav>
   );
 };

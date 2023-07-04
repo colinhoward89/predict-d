@@ -10,7 +10,7 @@
     "server": "npx ts-node src/server.ts",
     "ts-server": "nodemon --watch './**/*.ts' --exec 'ts-node' src/server.ts",
     "buildDeploy": "npm i && tsc",
-    "start": "node ./dist/src/index.js"
+    "start": "node .src/index.js"
   },
   "author": "Colin Howard",
   "license": "ISC",

@@ -4,7 +4,13 @@
   "description": "Predict server",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "build": "tsc",
+    "dev": "tsx  src/index.ts",
+    "test": "test",
+    "server": "npx ts-node src/server.ts",
+    "ts-server": "nodemon --watch './**/*.ts' --exec 'ts-node' src/server.ts",
+    "buildDeploy": "npm i && tsc",
+    "start": "node ./dist/src/index.js"
   },
   "author": "Colin Howard",
   "license": "ISC",

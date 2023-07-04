@@ -2,7 +2,7 @@
   "name": "server",
   "version": "1.0.0",
   "description": "Predict server",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "build": "tsc",
     "dev": "tsx  src/index.ts",
@@ -10,7 +10,10 @@
     "server": "npx ts-node src/index.ts",
     "ts-server": "nodemon --watch './**/*.ts' --exec 'ts-node' src/server.ts",
     "buildDeploy": "npm i && tsc",
-    "start": "ts-node src/index.ts"
+    "start": "node dist/index.js",
+    "postinstall": "tsc",
+    "watch-node": "nodemon dist/index.js",
+    "watch-ts": "tsc -w"
   },
   "author": "Colin Howard",
   "license": "ISC",
@@ -34,6 +37,6 @@
     "openai": "^3.3.0"
   },
   "engines": {
-    "node": "19.x"
+    "node": "19.1.0"
   }
 }

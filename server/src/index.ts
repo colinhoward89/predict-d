@@ -1,4 +1,4 @@
-import express, { Express, Request, response, Response } from 'express';
+import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import session from 'express-session';
 const SECRET = process.env.SECRET || 'this is not very secure';

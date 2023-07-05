@@ -29,9 +29,6 @@ const createUser = async (req: Request, res: Response) => {
       password: hash,
     });
     const savedUser = await newUser.save();
-    if (req.session) {
-      req.session.uid = savedUser._id;
-    }
     res.status(201).send(savedUser);
   } catch (error) {
     res.status(400).send({ error: error || 'Could not create user' });
@@ -48,9 +45,6 @@ const login = async (req: Request, res: Response) => {
     const validatedPass = await bcrypt.compare(password, user.password);
     if (!validatedPass) {
       throw new Error();
-    }
-    if (req.session) {
-      req.session.uid = user._id;
     }
     res.status(200).send(user);
   } catch (error) {

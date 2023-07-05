@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "install": "cd client && npm i . && cd ../server && npm i .",
-    "server": "npx ts-node server/src/server.ts",
+    "server": "npx ts-node server/src/index.ts",
     "client": "cd client && npm start && cd .. ",
     "start:server-client": "concurrently \"npm run server\" \"npm run client \""
   },

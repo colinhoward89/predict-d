@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "Predict server",
+  "description": "Predict-d server",
   "main": "server/dist/index.js",
   "scripts": {
     "build": "tsc",
@@ -33,6 +33,6 @@
     "openai": "^3.3.0"
   },
   "engines": {
-    "node": "19.1.0"
+    "node": "18.x"
   }
 }

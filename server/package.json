@@ -4,18 +4,12 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsx  src/index.ts",
-    "test": "jest",
-    "test-async": "jest --detectOpenHandles",
-    "test:watch": "jest --watch",
-    "server": "npx ts-node src/server.ts",
-    "ts-server": "nodemon --watch './**/*.ts' --exec 'ts-node' src/server.ts",
-    "lint": "eslint . --ext .ts",
-    "lint-and-fix": "eslint . --ext .ts --fix",
-    "buildDeploy": "npm i && tsc",
-    "start": "nodemon src/index.ts"
-  },
+    "start": "nodemon src/index.ts",
+    "build": "rimraf dist && tsc",
+    "ts.check": "tsc --project tsconfig.json",
+    "add-build": "git add dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+    },
   "author": "Colin Howard",
   "license": "ISC",
   "devDependencies": {
@@ -39,5 +33,10 @@
   },
   "engines": {
     "node": "18.x"
-  }
+  },
+  "pre-commit": [
+    "ts.check",
+    "build",
+    "add-build"
+]
 }

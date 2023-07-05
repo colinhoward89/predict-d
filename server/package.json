@@ -4,8 +4,11 @@
   "description": "Predict server",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "tsc && node dist/index.js",
+    "client-install": "cd client && npm install",
     "start": "node dist/index.js",
+    "server": "cd source && nodemon index.ts",
+    "client": "cd client && npm start",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "postinstall": "tsc"
   },
   "author": "Colin Howard",

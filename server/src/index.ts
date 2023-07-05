@@ -19,7 +19,7 @@ export const config = {
 };
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Code with Rico. Ready to run on Heroku.');
+  res.send('Ready to run on Heroku.');
 });
 
 (async () => {

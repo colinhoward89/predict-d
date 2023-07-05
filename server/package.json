@@ -9,7 +9,7 @@
     "ts.check": "tsc --project tsconfig.json",
     "add-build": "git add dist",
     "test": "echo \"Error: no test specified\" && exit 1"
-    },
+  },
   "author": "Colin Howard",
   "license": "ISC",
   "devDependencies": {
@@ -29,14 +29,13 @@
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "mongoose": "^7.2.2",
-    "openai": "^3.3.0"
-  },
-  "engines": {
-    "node": "18.x"
+    "openai": "^3.3.0",
+    "pre-commit": "^1.2.2",
+    "rimraf": "^5.0.1"
   },
   "pre-commit": [
     "ts.check",
     "build",
     "add-build"
-]
+  ]
 }

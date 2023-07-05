@@ -19,7 +19,11 @@ export const config = {
 };
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Ready to run on Heroku.');
+  return res.send('Express TypeScript on Vercel');
+});
+
+app.get('/ping', (req: Request, res: Response) => {
+  return res.send('pong 🏓')
 });
 
 (async () => {

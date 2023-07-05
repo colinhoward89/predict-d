@@ -14,7 +14,7 @@
     "lint": "eslint . --ext .ts",
     "lint-and-fix": "eslint . --ext .ts --fix",
     "buildDeploy": "npm i && tsc",
-    "start": "node ./dist/src/index.js"
+    "start": "nodemon src/index.ts"
   },
   "author": "Colin Howard",
   "license": "ISC",

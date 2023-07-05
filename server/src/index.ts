@@ -46,7 +46,7 @@ app.get('/ping', (req: Request, res: Response) => {
 
 app
   .use(cors({
-    origin: 'http://localhost:3000', // Specify the allowed origin
+    origin:  ['http://localhost:3000', 'https://predict-d.vercel.app'], // Specify the allowed origin
     credentials: true, // Enable credentials (cookies, authorization headers, etc.)
   }))
   .use(express.json())
